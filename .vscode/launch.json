@@ -3,6 +3,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "DiaryApp",
+            "request": "launch",
+            "mainClass": "DiaryApp",
+            "projectName": "Memento-Project_7b337cdc"
+        },
+        {
+            "type": "java",
             "name": "Launch JavaFX Application",
             "request": "launch",
             "mainClass": "Main",
