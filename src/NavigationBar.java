@@ -24,7 +24,7 @@ public class NavigationBar {
 
         // Create navigation sections
         homeSection = createNavSection("🏠", homePageContent);
-        toDoSection = createNavSection("📝", toDoPageContent);
+        toDoSection = createNavSection("📝", new ToDoPage().getLayout()); 
         loginSection = createNavSection("👤", loginPageContent);
 
         // Add sections to the navigation bar
