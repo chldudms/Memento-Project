@@ -68,7 +68,7 @@ public class Main extends Application {
         // 로고 아래에 경계선 생성
         Line borderLine = new Line();
         borderLine.setStartX(0);
-        borderLine.setEndX(300); // 경계선 길이를 300으로 설정
+        borderLine.setEndX(330); // 경계선 길이를 300으로 설정
         borderLine.setStroke(Color.PINK);  // 경계선 색상 설정
         borderLine.setStrokeWidth(2);  // 경계선 두께 설정
 
