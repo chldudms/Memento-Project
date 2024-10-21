@@ -1,3 +1,4 @@
+
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
@@ -8,7 +9,6 @@ import javafx.geometry.Insets;
 
 public class NavigationBar {
     private HBox navigationBar;
-    private StackPane homeSection, toDoSection, loginSection;
     private Main mainApp;
 
     // Constructor now takes Main as a parameter
@@ -23,9 +23,9 @@ public class NavigationBar {
         navigationBar.setAlignment(Pos.CENTER);
 
         // Create navigation sections
-        homeSection = createNavSection("🏠", homePageContent);
-        toDoSection = createNavSection("📝", toDoPageContent);
-        loginSection = createNavSection("👤", loginPageContent);
+        StackPane homeSection = createNavSection("🏠", homePageContent);
+        StackPane toDoSection = createNavSection("📝", toDoPageContent);
+        StackPane loginSection = createNavSection("👤", loginPageContent);
 
         // Add sections to the navigation bar
         navigationBar.getChildren().addAll(homeSection, toDoSection, loginSection);

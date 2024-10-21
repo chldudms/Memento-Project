@@ -1,0 +1,44 @@
+/* styles.css */
+
+/* 전체 배경 색상 */
+.root {
+    -fx-background-color: #F5F5F5; /* 배경 색상 */
+}
+
+/* 다이어리 생성 모달 */
+.diary-modal {
+    -fx-background-color: #FFB6C1; /* 연핑크 배경 */
+    -fx-padding: 20; /* 내부 여백 */
+    -fx-border-radius: 10; /* 둥근 모서리 */
+    -fx-min-width: 300; /* 최소 너비 */
+    -fx-min-height: 300; /* 최소 높이 */
+}
+
+/* 닫기 버튼 스타일 */
+.close-button {
+    -fx-background-color: transparent; /* 배경 투명 */
+    -fx-text-fill: #FFFFFF; /* 글자 색상 */
+    -fx-font-size: 18px; /* 글자 크기 */
+    -fx-padding: 5; /* 여백 */
+}
+
+/* 텍스트 필드 스타일 */
+.text-field {
+    -fx-background-color: #FFFFFF; /* 흰색 배경 */
+    -fx-border-color: #FF69B4; /* 핑크색 테두리 */
+    -fx-border-radius: 5; /* 둥근 테두리 */
+}
+
+/* 버튼 스타일 */
+.button {
+    -fx-background-color: #FF69B4; /* 핑크 버튼 배경 */
+    -fx-text-fill: #FFFFFF; /* 흰색 글자 */
+    -fx-font-size: 14px; /* 글자 크기 */
+    -fx-padding: 10; /* 여백 */
+    -fx-border-radius: 5; /* 둥글게 */
+}
+
+/* 버튼 호버 효과 */
+.button:hover {
+    -fx-background-color: #FF1493; /* 다크 핑크색으로 변경 */
+}

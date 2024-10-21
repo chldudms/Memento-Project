@@ -1,33 +1,98 @@
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.GridPane;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
-import javafx.geometry.Pos;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.geometry.Insets;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 
 public class HomePage {
     private StackPane layout;
+    private GridPane diaryGrid;
+    private Pane createDiaryPane;  
+    private String selectedCoverColor = "#FFB6C1";  
 
-    public HomePage() {
-        // Home Page content
+    public HomePage(Main mainApp) {
         layout = new StackPane();
-        layout.getChildren().add(new Text("Welcome to Home Page!"));
-        layout.setStyle("-fx-background-color:  #FFFFFF;");
+        diaryGrid = new GridPane();  
+        diaryGrid.setHgap(10);  
+        diaryGrid.setVgap(10);  
 
-        // 플러스 버튼을 왼쪽 하단에 추가
+        // 다이어리 생성 버튼
         Button createDiaryButton = new Button("+");
-        createDiaryButton.setStyle("-fx-background-color:#AEDEFC; -fx-font-size: 24px; -fx-border-radius: 50%; -fx-pref-width: 50px; -fx-pref-height: 50px;");
-        
-        // 버튼을 왼쪽 하단에 배치
-        HBox buttonBox = new HBox(createDiaryButton);
-        buttonBox.setAlignment(Pos.BOTTOM_RIGHT);  // 버튼을 하단 왼쪽에 정렬
-        buttonBox.setPadding(new Insets(10));    // 약간의 여백 추가
+        createDiaryButton.getStyleClass().add("create-button");  // CSS 클래스 추가
+        createDiaryButton.setOnAction(e -> openDiaryCreationPane());  
 
-        // 레이아웃에 버튼을 추가
-        layout.getChildren().add(buttonBox);
+        // 왼쪽 하단에 버튼 배치
+        VBox vbox = new VBox(diaryGrid);
+        AnchorPane buttonContainer = new AnchorPane(createDiaryButton);
+        AnchorPane.setBottomAnchor(createDiaryButton, 20.0);
+        AnchorPane.setRightAnchor(createDiaryButton, 20.0);  // 버튼 위치 조정
+
+        layout.getChildren().addAll(vbox, buttonContainer);
+        layout.setStyle("-fx-padding: 20;");
+
+        // 다이어리 생성 UI 생성
+        createDiaryPane = createDiaryUI();
+        layout.getChildren().add(createDiaryPane);
+        createDiaryPane.setVisible(false);  
+    }
+
+    public void addDiary(String title, String cover) {
+        // 다이어리 카드 생성
+        DiaryCard diaryCard = new DiaryCard(title, cover); 
+        int rowCount = diaryGrid.getChildren().size() / 2;  
+        diaryGrid.add(diaryCard.getLayout(), diaryGrid.getChildren().size() % 2, rowCount);  
+        createDiaryPane.setVisible(false);  
+    }
+
+    public String getSelectedCoverColor() {
+        return selectedCoverColor;  
     }
 
     public StackPane getLayout() {
         return layout;
+    }
+
+    private Pane createDiaryUI() {
+        VBox diaryCreationLayout = new VBox();
+        diaryCreationLayout.getStyleClass().add("diary-modal");  // CSS 클래스 추가
+
+        Button closeButton = new Button("X");
+        closeButton.getStyleClass().add("close-button");  // CSS 클래스 추가
+        closeButton.setOnAction(e -> createDiaryPane.setVisible(false));  
+
+        TextField titleField = new TextField();
+        titleField.setPromptText("다이어리 제목 입력");
+
+        ColorPicker colorPicker = new ColorPicker();  
+        colorPicker.setValue(javafx.scene.paint.Color.PINK);  
+
+        Button createButton = new Button("다이어리 생성");
+        createButton.setOnAction(e -> {
+            String title = titleField.getText();
+            if (!title.isEmpty()) {
+                addDiary(title, toHex(colorPicker.getValue()));  
+                titleField.clear();  
+            }
+        });
+
+        diaryCreationLayout.getChildren().addAll(closeButton, titleField, colorPicker, createButton);
+        return diaryCreationLayout;
+    }
+
+    private String toHex(javafx.scene.paint.Color color) {
+        return String.format("#%02X%02X%02X",
+                (int) (color.getRed() * 255),
+                (int) (color.getGreen() * 255),
+                (int) (color.getBlue() * 255));
+    }
+
+    private void openDiaryCreationPane() {
+        createDiaryPane.setVisible(true);  
     }
 }

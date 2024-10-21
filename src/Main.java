@@ -1,8 +1,10 @@
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -13,13 +15,13 @@ import javafx.geometry.Insets;
 import javafx.scene.shape.Line;
 
 public class Main extends Application {
-
+    private StackPane homeSection, toDoSection, loginSection;
     private BorderPane mainLayout;
 
     @Override
     public void start(Stage primaryStage) {
         // 페이지 생성 (홈, 할 일, 로그인)
-        HomePage homePage = new HomePage();
+        HomePage homePage = new HomePage(this);
         ToDoPage toDoPage = new ToDoPage();
         LoginPage loginPage = new LoginPage();
 
