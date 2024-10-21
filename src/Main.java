@@ -30,7 +30,7 @@ public class Main extends Application {
             loginPage.getLayout(), 
             this
         );
-
+        
         // 로고가 있는 상단 레이아웃 생성
         VBox topLayout = createTopLayout();
 
