@@ -28,6 +28,8 @@ public class LoginPage {
         grid.add(usernameLabel, 0, 0);
         grid.add(usernameField, 1, 0);
 
+
+        
         // 비밀번호 입력 필드
         Label passwordLabel = new Label("비밀번호:");
         PasswordField passwordField = new PasswordField();
