@@ -61,13 +61,13 @@ public class ToDoPage {
 
         // Create and configure the date label
         dateLabel = new Label(); // Label for displaying the current date
-        dateLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #000000;"); // 스타일 설정
+        dateLabel.setStyle("-fx-font-size: 25px; -fx-text-fill: #FF3EA5; -fx-text-weight: bold;"); // 스타일 설정
         updateDateTime(); // Initialize with the current date and time
 
         // Create a ScrollPane for the checklist container
         ScrollPane scrollPane = new ScrollPane(checklistContainer);
         scrollPane.setFitToWidth(true); // ScrollPane 너비에 맞춤
-        scrollPane.setPrefHeight(370); // ScrollPane 높이 설정
+        scrollPane.setPrefHeight(340); // ScrollPane 높이 설정
 
         // Set the background color of the scroll pane to white and set transparent borders
         scrollPane.setStyle("-fx-background-color: white; -fx-border-color: transparent; -fx-background: white;");
@@ -119,21 +119,42 @@ public class ToDoPage {
         checklistItemContainer.getChildren().addAll(checklistItem, lineTextContainer); // Add item and line/text field to the container
         checklistContainer.getChildren().add(checklistItemContainer); // Add the container to the checklist
 
+        // Add event handler to remove item when checked
+        checklistItem.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) { // If checkbox is checked
+                checklistContainer.getChildren().remove(checklistItemContainer); // Remove the checklist item
+                  // Move the add button below the new checklist item if there are 8 or fewer items
+                if (checklistContainer.getChildren().size() <= 7) {
+                    checklistContainer.getChildren().remove(addImageView); // Remove from checklist container
+                    checklistContainer.getChildren().add(addImageView); // Add button below the new checklist item
+                }
+                else {
+                    // If there are more than 8 items, ensure the add button is in its original position
+                    if (!mainLayout.getChildren().contains(addImageView)) {
+                        checklistContainer.getChildren().remove(addImageView);
+                        mainLayout.getChildren().add(addImageView);
+                    }
+                }
+            }
+        });
+
         // Move the add button below the new checklist item if there are 8 or fewer items
         if (checklistContainer.getChildren().size() <= 8) {
             checklistContainer.getChildren().remove(addImageView); // Remove from checklist container
             checklistContainer.getChildren().add(addImageView); // Add button below the new checklist item
-        } else {
+        } 
+        else {
             // If there are more than 8 items, ensure the add button is in its original position
             if (!mainLayout.getChildren().contains(addImageView)) {
-                mainLayout.getChildren().add(2, addImageView); // Keep the button at the top
+                checklistContainer.getChildren().remove(addImageView);
+                mainLayout.getChildren().add(addImageView);
             }
         }
     }
 
     // Method to update the date and time
     private void updateDateTime() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime now = LocalDateTime.now();
         dateLabel.setText(now.format(formatter)); // Update the label with the current date and time
     }
