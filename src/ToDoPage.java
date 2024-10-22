@@ -55,7 +55,7 @@ public class ToDoPage {
         // Create a border pane for the title box
         BorderPane titleBox = new BorderPane();
         Label titleLabel = new Label("To Do"); // Title label
-        titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 10; -fx-text-fill: white;"); // Title styling
+        titleLabel.setStyle("-fx-font-size: 17px; -fx-font-weight: bold; -fx-padding: 10; -fx-text-fill: white;"); // Title styling
         titleBox.setCenter(titleLabel); // Center the label in the title box
         titleBox.setStyle("-fx-background-color: #F875AA; -fx-border-width: 0; -fx-pref-height: 40; -fx-pref-width: 150;"); // Box styling
 
