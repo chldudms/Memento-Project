@@ -1,7 +1,7 @@
-
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
 import javafx.geometry.Pos;
@@ -22,17 +22,17 @@ public class NavigationBar {
         navigationBar.setStyle("-fx-background-color:  #FFCDE1;");  // Light pink color
         navigationBar.setAlignment(Pos.CENTER);
 
-        // Create navigation sections
-        StackPane homeSection = createNavSection("🏠", homePageContent);
-        StackPane toDoSection = createNavSection("📝", toDoPageContent);
-        StackPane loginSection = createNavSection("👤", loginPageContent);
+        // Create navigation sections with images
+        StackPane homeSection = createNavSection("styles/home.png", homePageContent);
+        StackPane toDoSection = createNavSection("styles/todo.png", toDoPageContent);
+        StackPane loginSection = createNavSection("styles/login.png", loginPageContent);
 
         // Add sections to the navigation bar
         navigationBar.getChildren().addAll(homeSection, toDoSection, loginSection);
     }
 
-    // Method to create a navigation section
-    private StackPane createNavSection(String title, StackPane pageContent) {
+    // Method to create a navigation section with an image
+    private StackPane createNavSection(String imagePath, StackPane pageContent) {
         StackPane section = new StackPane();
         section.setPadding(new Insets(10));
         section.setStyle("-fx-background-color: #FFCDE1; -fx-border-color: transparent; -fx-border-width: 5px;");
@@ -40,12 +40,13 @@ public class NavigationBar {
         section.setMaxWidth(150);
         section.setOnMouseClicked(e -> mainApp.getMainLayout().setCenter(pageContent)); // Update center content on click
 
-        // 하단바 텍스트
-        Text text = new Text(title);
-        text.setFont(Font.font(30));
-        text.setFill(Color.WHITE);
+        // 이미지 추가
+        Image iconImage = new Image(imagePath);
+        ImageView imageView = new ImageView(iconImage);
+        imageView.setFitHeight(30);  // 이미지 크기 조정
+        imageView.setFitWidth(30);
 
-        section.getChildren().add(text);
+        section.getChildren().add(imageView);
         return section;
     }
 
