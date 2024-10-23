@@ -12,7 +12,7 @@ public class NavigationBar {
     private Main mainApp;
 
     // Constructor now takes Main as a parameter
-    public NavigationBar(StackPane homePageContent, StackPane toDoPageContent, StackPane loginPageContent, Main mainApp) {
+    public NavigationBar(StackPane homepage, StackPane toDopage, StackPane loginpage, Main mainApp) {
         this.mainApp = mainApp;  // Save reference to the Main class
 
         // Bottom Navigation Bar Sections (Home, To-Do, Login)
@@ -23,28 +23,35 @@ public class NavigationBar {
         navigationBar.setAlignment(Pos.CENTER);
 
         // Create navigation sections with images
-        StackPane homeSection = createNavSection("styles/home.png", homePageContent);
-        StackPane toDoSection = createNavSection("styles/todo.png", toDoPageContent);
-        StackPane loginSection = createNavSection("styles/login.png", loginPageContent);
+        StackPane homeSection = createNavSection("styles/home.png", homepage);
+        StackPane toDoSection = createNavSection("styles/todo.png", toDopage);
+        StackPane loginSection = createNavSection("styles/login.png", loginpage);
 
         // Add sections to the navigation bar
         navigationBar.getChildren().addAll(homeSection, toDoSection, loginSection);
     }
 
     // Method to create a navigation section with an image
-    private StackPane createNavSection(String imagePath, StackPane pageContent) {
+    private StackPane createNavSection(String imagePath, StackPane page) {
         StackPane section = new StackPane();
         section.setPadding(new Insets(10));
         section.setStyle("-fx-background-color: #FFCDE1; -fx-border-color: transparent; -fx-border-width: 5px;");
         section.setMinWidth(100);
         section.setMaxWidth(150);
-        section.setOnMouseClicked(e -> mainApp.getMainLayout().setCenter(pageContent)); // Update center content on click
+        section.setOnMouseClicked(e -> mainApp.getMainLayout().setCenter(page)); // Update center content on click
 
         // 이미지 추가
         Image iconImage = new Image(imagePath);
         ImageView imageView = new ImageView(iconImage);
-        imageView.setFitHeight(30);  // 이미지 크기 조정
-        imageView.setFitWidth(30);
+
+            // 로그인 아이콘만 이미지 크기가 작아서 조정
+        if (imagePath.contains("login")) {
+            imageView.setFitHeight(50);  // 로그인 아이콘의 크기 조정
+            imageView.setFitWidth(50);
+        } else {
+            imageView.setFitHeight(30);  // 다른 아이콘 크기
+            imageView.setFitWidth(30);
+        }
 
         section.getChildren().add(imageView);
         return section;
