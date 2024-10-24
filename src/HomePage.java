@@ -94,7 +94,7 @@ public class HomePage {
         diaryCreationLayout.setStyle("-fx-background-color: white; "
                                    + "-fx-border-radius: 10; "
                                    + "-fx-background-radius: 10; "
-                                   + "-fx-border-color: #CCCCCC; "  // 테두리 추가
+                                   + "-fx-border-color: #A7A7A7; "  // 테두리 추가
                                    + "-fx-border-width: 2px;");  // 테두리 두께
         diaryCreationLayout.setMaxWidth(300);  // 최대 너비 설정
 
