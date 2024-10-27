@@ -19,9 +19,9 @@ public class NavigationBar {
 
         // Bottom Navigation Bar Sections (Home, To-Do, Login)
         navigationBar = new HBox();
-        navigationBar.setPadding(new Insets(10));
-        navigationBar.setSpacing(20);
-        navigationBar.setStyle("-fx-background-color:  #FFCDE1;");  // Light pink color
+        navigationBar.setPadding(new Insets(5));  // Padding 유지
+        navigationBar.setSpacing(40); // 요소 사이 간격을 줄임
+        navigationBar.setStyle("-fx-background-color:  #FFCDE1; -fx-pref-height: 40px;");  // 높이를 줄이기 위한 pref-height 추가
         navigationBar.setAlignment(Pos.CENTER);
 
         // Create navigation sections with images
@@ -39,10 +39,10 @@ public class NavigationBar {
     // Method to create a navigation section with an image
     private StackPane createNavSection(String imagePath, String selectedImagePath, StackPane page, boolean isHome) {
         StackPane section = new StackPane();
-        section.setPadding(new Insets(10));
+        section.setPadding(new Insets(5)); // Padding 유지
         section.setStyle("-fx-background-color: #FFCDE1; -fx-border-color: transparent; -fx-border-width: 5px;");
-        section.setMinWidth(100);
-        section.setMaxWidth(150);
+        section.setMinWidth(80); // 섹션의 최소 너비 줄이기
+        section.setMaxWidth(120); // 섹션의 최대 너비 줄이기
 
         // 이미지 추가
         Image iconImage = new Image(imagePath);

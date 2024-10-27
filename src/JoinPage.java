@@ -50,7 +50,7 @@ public class JoinPage {
         // 가입 버튼
         Button joinButton = new Button("Join");
         joinButton.setStyle("-fx-background-color: #FFCDE1; -fx-text-fill: #F875AA; -fx-font-size:20px; -fx-font-weight: bold; -fx-background-radius: 30px;");
-        joinButton.setPrefWidth(140); // 버튼 너비 중앙으로 배치
+        joinButton.setPrefWidth(120); // 버튼 너비 중앙으로 배치
         joinButton.setPrefHeight(50); // 버튼 높이
         grid.add(joinButton, 0, 3, 2, 1); // 버튼을 새로운 행에 추가
 
