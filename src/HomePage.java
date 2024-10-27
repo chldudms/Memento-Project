@@ -13,19 +13,48 @@ import javafx.scene.layout.HBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.geometry.Pos;  // 중앙 정렬에 필요
+import javafx.scene.control.ScrollPane;
+
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.control.ScrollPane;
+import javafx.geometry.Insets;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 
 public class HomePage {
     private StackPane layout;
     private GridPane diaryGrid;
-    private Pane createDiaryPane;  
+    private Pane createDiaryPane;
     private String selectedCoverColor = "#FFB6C1";  
+    private VBox diaryContainer;
+    private VBox mainLayout; // 메인 레이아웃
 
     public HomePage(Main mainApp) {  
         layout = new StackPane();
-        diaryGrid = new GridPane();  
+        diaryGrid = new GridPane();
         diaryGrid.setHgap(10);  
         diaryGrid.setVgap(10); 
+        diaryContainer = new VBox(10);
         
+
+        // ScrollPane으로 다이어리 목록 감싸기
+        ScrollPane scrollPane = new ScrollPane(diaryGrid);
+        scrollPane.setFitToWidth(true);  
+        scrollPane.setPrefHeight(1000);  
+        scrollPane.getStyleClass().clear(); // 기본 스타일 제거
+        //scrollPane.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // 세로 스크롤 바 항상 보이기
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // 가로 스크롤 바는 보이지 않게 설정
+        
+        // 메인 레이아웃 초기화
+        mainLayout = new VBox(10); 
+        mainLayout.setPadding(new Insets(10)); // Padding 추가
+
         // 플러스 이미지 로드
         Image plusIcon = new Image("styles/plusBtn.png");  // 이미지 경로 지정
         ImageView plusImageView = new ImageView(plusIcon);
@@ -39,26 +68,33 @@ public class HomePage {
         createDiaryButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 0;");
         createDiaryButton.setOnAction(e -> openDiaryCreationPane()); 
 
-        // 왼쪽 하단에 버튼 배치
-        VBox vbox = new VBox(diaryGrid);
+        // AnchorPane으로 버튼 고정
         AnchorPane buttonContainer = new AnchorPane(createDiaryButton);
-        // 버튼 위치 조정
         AnchorPane.setBottomAnchor(createDiaryButton, 15.0);
         AnchorPane.setRightAnchor(createDiaryButton, 10.0);  
 
-        layout.getChildren().addAll(vbox, buttonContainer);
-        layout.setStyle("-fx-padding: 20;");
+        // 메인 레이아웃에 ScrollPane 추가
+        //mainLayout.getChildren().add(scrollPane);
+         // 메인 레이아웃에 ScrollPane과 버튼 추가
+         mainLayout.getChildren().addAll(scrollPane, buttonContainer);
+        
+         // 전체 레이아웃에 메인 레이아웃 추가
+         layout.getChildren().add(mainLayout);
+         layout.setStyle("-fx-background-color: #FFFFFF;"); // Set background color
+
+       // layout.setStyle("-fx-padding: 20;");
 
         // 다이어리 생성 UI 생성
         createDiaryPane = createDiaryUI();  
         layout.getChildren().add(createDiaryPane);
         createDiaryPane.setVisible(false);  // 다이어리 생성 페이지 숨기기  
+        
     }
 
     public void addDiary(String title, String cover) {
         // 다이어리 카드 생성
         DiaryCard diaryCard = new DiaryCard(title, cover); 
-        int rowCount = diaryGrid.getChildren().size() / 2;  
+        int rowCount = diaryGrid.getChildren().size() / 2;   // 한 줄에 다이어리 두 개씩
         diaryGrid.add(diaryCard.getLayout(), diaryGrid.getChildren().size() % 2, rowCount);  
         createDiaryPane.setVisible(false);  
     }
@@ -132,9 +168,9 @@ public class HomePage {
         });
 
         // 닫기 버튼을 오른쪽 상단에 배치하기 위해 HBox 사용
-    HBox header = new HBox(closeButton);  // 닫기 버튼을 HBox로 감싸기
-    header.setAlignment(Pos.TOP_RIGHT);  // 오른쪽 상단 정렬
-    header.setPadding(new Insets(-50, 0, 0, 0));  // 위쪽 패딩을 설정하여 x버튼이 더 위로 가게
+        HBox header = new HBox(closeButton);  // 닫기 버튼을 HBox로 감싸기
+        header.setAlignment(Pos.TOP_RIGHT);  // 오른쪽 상단 정렬
+        header.setPadding(new Insets(-50, 0, 0, 0));  // 위쪽 패딩을 설정하여 x버튼이 더 위로 가게
 
 
         // 생성 레이아웃에 요소 추가

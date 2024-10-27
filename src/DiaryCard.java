@@ -18,7 +18,7 @@ public class DiaryCard {
         titleText.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");  // 제목 텍스트 스타일
 
         layout.getChildren().addAll(cover, titleText);  // 표지와 제목 추가
-        layout.setStyle("-fx-padding: 10; -fx-alignment: center;");  // 패딩 및 정렬 설정
+        layout.setStyle("-fx-padding: 5; -fx-alignment: center;");  // 패딩 및 정렬 설정
     }
 
     public StackPane getLayout() {
