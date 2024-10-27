@@ -19,10 +19,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        // 페이지 생성 (홈, 할 일, 로그인)
+        // 페이지 생성 (홈, 할 일, 로그인, 가입)
         HomePage homePage = new HomePage(this);
         ToDoPage toDoPage = new ToDoPage();
-        LoginPage loginPage = new LoginPage();
+        LoginPage loginPage = new LoginPage(primaryStage);
+        JoinPage joinPage = new JoinPage(primaryStage);
 
         // 하단 네비게이션 바 생성
         NavigationBar navigationBar = new NavigationBar(
@@ -31,16 +32,19 @@ public class Main extends Application {
             loginPage.getLayout(), 
             this
         );
-        
+
         // 로고가 있는 상단 레이아웃 생성
         VBox topLayout = createTopLayout();
 
         // 레이아웃 설정 및 하단 네비게이션 바 추가
         mainLayout = new BorderPane();
         mainLayout.setBottom(navigationBar.getLayout());
-        mainLayout.setTop(topLayout);  // 로고가 있는 상단 레이아웃 설정
-        mainLayout.setCenter(homePage.getLayout());  // 초기 화면은 홈 페이지
+        mainLayout.setTop(topLayout);  
+        mainLayout.setCenter(homePage.getLayout());  // 초기화면을 홈으로 설정
         mainLayout.setStyle("-fx-background-color: #FFFFFF;");
+
+        // 메인 레이아웃에 JoinPage 추가 (원하는 경우)
+        // mainLayout.setCenter(joinPage.getLayout());  // 예를 들어 가입 페이지로 전환할 경우
 
         // 메인 레이아웃으로 씬 생성
         Scene mainScene = new Scene(mainLayout, 375, 667);
@@ -48,35 +52,31 @@ public class Main extends Application {
         // 스테이지 설정
         primaryStage.setTitle("MementoDiary");
         primaryStage.setScene(mainScene);
-      //  primaryStage.setResizable(false);  // 창 크기 조절 비활성화
         primaryStage.show();
     }
 
     // 상단 로고 및 경계선 생성
     private VBox createTopLayout() {
-        VBox topLayout = new VBox();  // VBox 사용
+        VBox topLayout = new VBox();  
         topLayout.setPadding(new Insets(20));
-        topLayout.setAlignment(Pos.CENTER);  // 중앙 정렬로 변경
+        topLayout.setAlignment(Pos.CENTER);  
 
         // "Memento" 로고 생성
         Text logo = new Text("Memento");
-        logo.setFont(Font.font("", FontWeight.NORMAL, 35));  // 폰트 굵기 크기 설정
-        logo.setFill(Color.SKYBLUE);  // 폰트 색상 설정
-        // VBox의 상하 간격 설정
-        topLayout.setSpacing(10);  // 간격
- 
+        logo.setFont(Font.font("", FontWeight.NORMAL, 35));  
+        logo.setFill(Color.SKYBLUE);  
 
         // 로고 아래에 경계선 생성
         Line borderLine = new Line();
         borderLine.setStartX(0);
-        borderLine.setEndX(330); // 경계선 길이를 300으로 설정
-        borderLine.setStroke(Color.PINK);  // 경계선 색상 설정
-        borderLine.setStrokeWidth(2);  // 경계선 두께 설정
+        borderLine.setEndX(330); 
+        borderLine.setStroke(Color.PINK);  
+        borderLine.setStrokeWidth(2);  
 
         // 중앙 정렬을 위한 HBox 생성
         HBox lineContainer = new HBox();
-        lineContainer.setAlignment(Pos.CENTER); // 중앙 정렬
-        lineContainer.getChildren().add(borderLine); // 경계선 추가
+        lineContainer.setAlignment(Pos.CENTER); 
+        lineContainer.getChildren().add(borderLine); 
 
         // 로고와 경계선을 레이아웃에 추가
         topLayout.getChildren().addAll(logo, lineContainer);
