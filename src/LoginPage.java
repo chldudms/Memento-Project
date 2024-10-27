@@ -42,7 +42,7 @@ public class LoginPage {
         // 로그인 버튼
         Button loginButton = new Button("Login");
         loginButton.setStyle("-fx-background-color: #FFCDE1; -fx-text-fill: #F875AA; -fx-font-size:20px; -fx-font-weight: bold; -fx-background-radius: 30px;");
-        loginButton.setPrefWidth(140); // 버튼 너비 중앙으로 배치
+        loginButton.setPrefWidth(120); // 버튼 너비 중앙으로 배치
         loginButton.setPrefHeight(50); // 버튼 높이
         grid.add(loginButton, 0, 2, 2, 1); // 버튼을 두 개의 열을 차지하도록 설정
 
