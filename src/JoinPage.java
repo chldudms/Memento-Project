@@ -1,7 +1,11 @@
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.geometry.Insets;
@@ -11,6 +15,8 @@ import javafx.geometry.HPos;
 
 public class JoinPage {
     private StackPane layout;
+    private StackPane mainContent; // 메인 콘텐츠 StackPane
+    private StackPane loginPageLayer; 
 
     public JoinPage(Stage primaryStage) { // primaryStage를 매개변수로 받음
         // Join Page content
@@ -53,6 +59,24 @@ public class JoinPage {
         joinButton.setPrefWidth(120); // 버튼 너비 중앙으로 배치
         joinButton.setPrefHeight(50); // 버튼 높이
         grid.add(joinButton, 0, 3, 2, 1); // 버튼을 새로운 행에 추가
+
+         // 로그인 링크
+         Hyperlink loginLink = new Hyperlink("Login");
+         loginLink.setStyle("-fx-text-fill: #6FC8FF; -fx-font-size: 18px;");
+         grid.add(loginLink, 0, 4, 2, 1);
+         GridPane.setHalignment(loginLink, javafx.geometry.HPos.CENTER);
+ 
+         // 링크 클릭 시 JoinPage 레이어 표시
+         loginLink.setOnAction(e -> {
+             if (loginPageLayer == null) { // JoinPage 레이어를 처음 클릭 시 생성
+                 loginPageLayer = new StackPane();
+                 LoginPage loginPage = new LoginPage(primaryStage);
+                 loginPageLayer.getChildren().add(LoginPage.getLayout());
+                 loginPageLayer.setStyle("-fx-background-color: rgba(255, 255, 255, 0.9);"); // 투명도 설정
+                 layout.getChildren().add(loginPageLayer);
+             }
+             loginPageLayer.setVisible(true); // JoinPage 레이어 표시
+         });
 
         // 버튼을 GridPane의 중앙으로 정렬
         GridPane.setHalignment(joinButton, HPos.CENTER);

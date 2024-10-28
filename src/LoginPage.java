@@ -10,7 +10,7 @@ import javafx.geometry.Pos;
 import javafx.stage.Stage;
 
 public class LoginPage {
-    private StackPane layout;
+    private static StackPane layout;
     private StackPane mainContent; // 메인 콘텐츠 StackPane
     private StackPane joinPageLayer; // JoinPage 레이어
 
@@ -76,7 +76,7 @@ public class LoginPage {
         layout.setStyle("-fx-background-color: #FFFFFF;");
     }
 
-    public StackPane getLayout() {
+    public static StackPane getLayout() {
         return layout;
     }
 }
