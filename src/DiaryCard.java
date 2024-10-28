@@ -10,7 +10,7 @@ public class DiaryCard {
 
     public DiaryCard(String title, String coverColor) {
         layout = new StackPane();
-        Rectangle cover = new Rectangle(150, 200);  // 다이어리 표지 크기
+        Rectangle cover = new Rectangle(150, 180);  // 다이어리 표지 크기
         cover.setFill(Color.web(coverColor));  // 선택된 색상으로 표지 색상 설정
 
         Text titleText = new Text(title);
