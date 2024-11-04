@@ -3,6 +3,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
@@ -43,9 +44,6 @@ public class Main extends Application {
         mainLayout.setCenter(homePage.getLayout());  // 초기화면을 홈으로 설정
         mainLayout.setStyle("-fx-background-color: #FFFFFF;");
 
-        // 메인 레이아웃에 JoinPage 추가 (원하는 경우)
-        // mainLayout.setCenter(joinPage.getLayout());  // 예를 들어 가입 페이지로 전환할 경우
-
         // 메인 레이아웃으로 씬 생성
         Scene mainScene = new Scene(mainLayout, 375, 667);
         
@@ -77,6 +75,8 @@ public class Main extends Application {
         HBox lineContainer = new HBox();
         lineContainer.setAlignment(Pos.CENTER); 
         lineContainer.getChildren().add(borderLine); 
+
+        VBox.setMargin(lineContainer, new Insets(10, 0, 0, 0));
 
         // 로고와 경계선을 레이아웃에 추가
         topLayout.getChildren().addAll(logo, lineContainer);
