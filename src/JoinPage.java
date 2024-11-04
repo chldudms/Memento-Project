@@ -13,12 +13,16 @@ import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.geometry.HPos;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 public class JoinPage {
     private StackPane layout;
-    private StackPane mainContent; // 메인 콘텐츠 StackPane
     private StackPane loginPageLayer; 
 
-    public JoinPage(Stage primaryStage) { // primaryStage를 매개변수로 받음
+    public JoinPage(Stage primaryStage) { 
         // Join Page content
         layout = new StackPane();
 
@@ -29,61 +33,92 @@ public class JoinPage {
         grid.setHgap(10);
         grid.setAlignment(Pos.CENTER); // 중앙 정렬
 
-        // 아이디 입력 필드 (크기 조정)
+        // 아이디 입력 필드
         TextField usernameField = new TextField();
         usernameField.setPromptText("아이디");
-        usernameField.setStyle("-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4"); // 글꼴 크기, 테두리 설정
-        usernameField.setPrefWidth(250); // 필드 너비 중앙으로 배치
-        usernameField.setPrefHeight(50); // 필드 높이
-        grid.add(usernameField, 0, 0, 2, 1); // Label 없이 바로 필드 추가
+        usernameField.setStyle("-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4"); 
+        usernameField.setPrefWidth(250); 
+        usernameField.setPrefHeight(50); 
+        grid.add(usernameField, 0, 0, 2, 1); 
 
-        // 비밀번호 입력 필드 (크기 조정)
+        // 비밀번호 입력 필드
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("비밀번호");
         passwordField.setStyle("-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4");
-        passwordField.setPrefWidth(250); // 필드 너비 중앙으로 배치
-        passwordField.setPrefHeight(50); // 필드 높이
-        grid.add(passwordField, 0, 1, 2, 1); // Label 없이 바로 필드 추가
+        passwordField.setPrefWidth(250); 
+        passwordField.setPrefHeight(50); 
+        grid.add(passwordField, 0, 1, 2, 1); 
 
-        // 비밀번호 확인 필드 (크기 조정)
+        // 비밀번호 확인 필드
         PasswordField passwdCheckField = new PasswordField();
         passwdCheckField.setPromptText("비밀번호 확인");
         passwdCheckField.setStyle("-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4");
-        passwdCheckField.setPrefWidth(250); // 필드 너비 중앙으로 배치
-        passwdCheckField.setPrefHeight(50); // 필드 높이
-        grid.add(passwdCheckField, 0, 2, 2, 1); // 비밀번호 확인 필드를 새로운 행에 추가
+        passwdCheckField.setPrefWidth(250); 
+        passwdCheckField.setPrefHeight(50); 
+        grid.add(passwdCheckField, 0, 2, 2, 1); 
 
         // 가입 버튼
         Button joinButton = new Button("Join");
         joinButton.setStyle("-fx-background-color: #FFCDE1; -fx-text-fill: #F875AA; -fx-font-size:20px; -fx-font-weight: bold; -fx-background-radius: 30px;");
-        joinButton.setPrefWidth(120); // 버튼 너비 중앙으로 배치
-        joinButton.setPrefHeight(50); // 버튼 높이
-        grid.add(joinButton, 0, 3, 2, 1); // 버튼을 새로운 행에 추가
+        joinButton.setPrefWidth(120); 
+        joinButton.setPrefHeight(50); 
+        grid.add(joinButton, 0, 3, 2, 1); 
 
-         // 로그인 링크
-         Hyperlink loginLink = new Hyperlink("Login");
-         loginLink.setStyle("-fx-text-fill: #6FC8FF; -fx-font-size: 18px;");
-         grid.add(loginLink, 0, 4, 2, 1);
-         GridPane.setHalignment(loginLink, javafx.geometry.HPos.CENTER);
+        // 로그인 링크
+        Hyperlink loginLink = new Hyperlink("Login");
+        loginLink.setStyle("-fx-text-fill: #6FC8FF; -fx-font-size: 18px;");
+        grid.add(loginLink, 0, 4, 2, 1);
+        GridPane.setHalignment(loginLink, HPos.CENTER);
  
-         // 링크 클릭 시 JoinPage 레이어 표시
-         loginLink.setOnAction(e -> {
-             if (loginPageLayer == null) { // JoinPage 레이어를 처음 클릭 시 생성
-                 loginPageLayer = new StackPane();
-                 LoginPage loginPage = new LoginPage(primaryStage);
-                 loginPageLayer.getChildren().add(LoginPage.getLayout());
-                 loginPageLayer.setStyle("-fx-background-color: rgba(255, 255, 255, 0.9);"); // 투명도 설정
-                 layout.getChildren().add(loginPageLayer);
-             }
-             loginPageLayer.setVisible(true); // JoinPage 레이어 표시
-         });
+        // 가입 버튼 클릭 시 처리
+        joinButton.setOnAction(e -> {
+            String username = usernameField.getText();
+            String password = passwordField.getText();
+            String confirmPassword = passwdCheckField.getText();
 
-        // 버튼을 GridPane의 중앙으로 정렬
+            if (!password.equals(confirmPassword)) {
+                System.out.println("비밀번호가 일치하지 않습니다.");
+                return; // 비밀번호 불일치 시 종료
+            }
+
+            // 데이터베이스에 사용자 정보 저장
+            saveUserToDatabase(username, password);
+        });
+
+        // 링크 클릭 시 JoinPage 레이어 표시
+        loginLink.setOnAction(e -> {
+            if (loginPageLayer == null) { // JoinPage 레이어를 처음 클릭 시 생성
+                loginPageLayer = new StackPane();
+                LoginPage loginPage = new LoginPage(primaryStage);
+                loginPageLayer.getChildren().add(loginPage.getLayout());
+                loginPageLayer.setStyle("-fx-background-color: rgba(255, 255, 255, 0.9);");
+                layout.getChildren().add(loginPageLayer);
+            }
+            loginPageLayer.setVisible(true);
+        });
+
         GridPane.setHalignment(joinButton, HPos.CENTER);
-
-        // 그리드를 레이아웃에 추가
         layout.getChildren().add(grid);
         layout.setStyle("-fx-background-color: #FFFFFF;"); // 배경색 설정
+    }
+
+    // 사용자 정보를 데이터베이스에 저장하는 메서드
+    private void saveUserToDatabase(String username, String password) {
+        String url = "jdbc:mysql://localhost:3306/userdb"; // 데이터베이스 URL
+        String user = "user"; // 데이터베이스 사용자명
+        String pass = "1111"; // 데이터베이스 비밀번호 (실제 비밀번호로 변경)
+
+        String sql = "INSERT INTO users (username, password) VALUES (?, ?)"; // 쿼리
+
+        try (Connection conn = DriverManager.getConnection(url, user, pass);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+            pstmt.executeUpdate(); // 쿼리 실행
+            System.out.println("회원가입 성공!");
+        } catch (SQLException e) {
+            System.err.println("회원가입 실패: " + e.getMessage());
+        }
     }
 
     public StackPane getLayout() {

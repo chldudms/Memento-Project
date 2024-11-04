@@ -9,6 +9,12 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class LoginPage {
     private static StackPane layout;
     private StackPane mainContent; // 메인 콘텐츠 StackPane
@@ -68,12 +74,46 @@ public class LoginPage {
             joinPageLayer.setVisible(true); // JoinPage 레이어 표시
         });
 
+        // 로그인 버튼 클릭 시 처리
+        loginButton.setOnAction(e -> {
+            String username = usernameField.getText();
+            String password = passwordField.getText();
+            if (validateUser(username, password)) {
+                System.out.println("로그인 성공!");
+                // 로그인 성공 시 추가 동작 구현
+            } else {
+                System.out.println("아이디 또는 비밀번호가 잘못되었습니다.");
+            }
+        });
+
         // 그리드를 메인 콘텐츠 StackPane에 추가
         mainContent.getChildren().add(grid);
 
         // 메인 레이아웃에 메인 콘텐츠 추가
         layout.getChildren().addAll(mainContent);
         layout.setStyle("-fx-background-color: #FFFFFF;");
+    }
+
+    // 사용자 정보를 데이터베이스에서 검증하는 메서드
+    private boolean validateUser(String username, String password) {
+        String url = "jdbc:mysql://localhost:3306/userdb"; // 데이터베이스 URL
+        String user = "user"; // 데이터베이스 사용자명
+        String pass = "1111"; // 데이터베이스 비밀번호
+
+        String sql = "SELECT * FROM users WHERE username = ? AND password = ?"; // 쿼리
+
+        try (Connection conn = DriverManager.getConnection(url, user, pass);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+            ResultSet rs = pstmt.executeQuery(); // 쿼리 실행
+
+            // 사용자 존재 여부 확인
+            return rs.next(); // 결과가 있으면 true 반환
+        } catch (SQLException e) {
+            System.err.println("로그인 실패: " + e.getMessage());
+            return false; // 예외 발생 시 false 반환
+        }
     }
 
     public static StackPane getLayout() {
