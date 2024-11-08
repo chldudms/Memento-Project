@@ -20,9 +20,9 @@ import java.sql.SQLException;
 
 public class JoinPage {
     private StackPane layout;
-    private StackPane loginPageLayer; 
+    private StackPane loginPageLayer;
 
-    public JoinPage(Stage primaryStage) { 
+    public JoinPage(Stage primaryStage) {
         // Join Page content
         layout = new StackPane();
 
@@ -36,40 +36,44 @@ public class JoinPage {
         // 아이디 입력 필드
         TextField usernameField = new TextField();
         usernameField.setPromptText("아이디");
-        usernameField.setStyle("-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4"); 
-        usernameField.setPrefWidth(250); 
-        usernameField.setPrefHeight(50); 
-        grid.add(usernameField, 0, 0, 2, 1); 
+        usernameField.setStyle(
+                "-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4");
+        usernameField.setPrefWidth(250);
+        usernameField.setPrefHeight(50);
+        grid.add(usernameField, 0, 0, 2, 1);
 
         // 비밀번호 입력 필드
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("비밀번호");
-        passwordField.setStyle("-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4");
-        passwordField.setPrefWidth(250); 
-        passwordField.setPrefHeight(50); 
-        grid.add(passwordField, 0, 1, 2, 1); 
+        passwordField.setStyle(
+                "-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4");
+        passwordField.setPrefWidth(250);
+        passwordField.setPrefHeight(50);
+        grid.add(passwordField, 0, 1, 2, 1);
 
         // 비밀번호 확인 필드
         PasswordField passwdCheckField = new PasswordField();
         passwdCheckField.setPromptText("비밀번호 확인");
-        passwdCheckField.setStyle("-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4");
-        passwdCheckField.setPrefWidth(250); 
-        passwdCheckField.setPrefHeight(50); 
-        grid.add(passwdCheckField, 0, 2, 2, 1); 
+        passwdCheckField.setStyle(
+                "-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4");
+        passwdCheckField.setPrefWidth(250);
+        passwdCheckField.setPrefHeight(50);
+        grid.add(passwdCheckField, 0, 2, 2, 1);
 
         // 가입 버튼
         Button joinButton = new Button("Join");
-        joinButton.setStyle("-fx-background-color: #FFCDE1; -fx-text-fill: #F875AA; -fx-font-size:20px; -fx-font-weight: bold; -fx-background-radius: 30px;");
-        joinButton.setPrefWidth(120); 
-        joinButton.setPrefHeight(50); 
-        grid.add(joinButton, 0, 3, 2, 1); 
+        joinButton.setStyle(
+                "-fx-background-color: #FFCDE1; -fx-text-fill: #F875AA; -fx-font-size:20px; -fx-font-weight: bold; -fx-background-radius: 30px;");
+        joinButton.setPrefWidth(120);
+        joinButton.setPrefHeight(50);
+        grid.add(joinButton, 0, 3, 2, 1);
 
         // 로그인 링크
         Hyperlink loginLink = new Hyperlink("Login");
         loginLink.setStyle("-fx-text-fill: #6FC8FF; -fx-font-size: 18px;");
         grid.add(loginLink, 0, 4, 2, 1);
         GridPane.setHalignment(loginLink, HPos.CENTER);
- 
+
         // 가입 버튼 클릭 시 처리
         joinButton.setOnAction(e -> {
             String username = usernameField.getText();
@@ -111,7 +115,7 @@ public class JoinPage {
         String sql = "INSERT INTO users (username, password) VALUES (?, ?)"; // 쿼리
 
         try (Connection conn = DriverManager.getConnection(url, user, pass);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);
             pstmt.setString(2, password);
             pstmt.executeUpdate(); // 쿼리 실행
