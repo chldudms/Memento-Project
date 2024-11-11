@@ -41,27 +41,27 @@ public class ToDoPage {
 
         if (addImage != null) {
             addImageView = new ImageView(addImage);
-            addImageView.setFitWidth(48);  // 이미지 너비 조정
-            addImageView.setFitHeight(43);  // 이미지 높이 조정
+            addImageView.setFitWidth(40);  // 이미지 너비 조정
+            addImageView.setFitHeight(35);  // 이미지 높이 조정
             addImageView.setOnMouseClicked(e -> addChecklistItem()); // 이미지 클릭 시 체크리스트 항목 추가
         } else {
             System.out.println("Image could not be loaded."); // 이미지가 null일 경우 메시지 출력
         }
 
         // Create a VBox for the main layout
-        mainLayout = new VBox(10); // Use VBox for vertical layout
+        mainLayout = new VBox(5); // Use VBox for vertical layout
         mainLayout.setAlignment(Pos.TOP_CENTER); // Align main layout to the top center
 
         // Create a border pane for the title box
         BorderPane titleBox = new BorderPane();
         Label titleLabel = new Label("To Do"); // Title label
-        titleLabel.setStyle("-fx-font-size: 25px; -fx-font-weight: bold; -fx-padding: 10; -fx-text-fill: white;"); // Title styling
+        titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 10; -fx-text-fill: white;"); // Title styling
         titleBox.setCenter(titleLabel); // Center the label in the title box
-        titleBox.setStyle("-fx-background-color: #F875AA; -fx-border-width: 0; -fx-pref-height: 40; -fx-pref-width: 150;"); // Box styling
+        titleBox.setStyle("-fx-background-color: #F875AA; -fx-border-width: 0; -fx-pref-height: 30; -fx-pref-width: 140;"); // Box styling
 
         // Create and configure the date label
         dateLabel = new Label(); // Label for displaying the current date
-        dateLabel.setStyle("-fx-font-size: 27px; -fx-text-fill: #FF3EA5; -fx-text-weight: bold;"); // 스타일 설정
+        dateLabel.setStyle("-fx-font-size: 25px; -fx-text-fill: #FF3EA5; -fx-text-weight: bold;"); // 스타일 설정
         updateDateTime(); // Initialize with the current date and time
 
         // Create a ScrollPane for the checklist container
@@ -94,13 +94,13 @@ public class ToDoPage {
         HBox checklistItemContainer = new HBox(10); // Create a container for the checklist item and line with spacing
         checklistItemContainer.setAlignment(Pos.CENTER); // Align checklist items to the center right
         CheckBox checklistItem = new CheckBox(); // Create a new checkbox
-        checklistItem.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-min-width: 14; -fx-min-height: 14;"); // Make sure the CheckBox is white
+        checklistItem.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-min-width: 12; -fx-min-height: 12;"); // Make sure the CheckBox is white
 
         // Create a StackPane to overlay the line and text field
         StackPane lineTextContainer = new StackPane();
 
         // Create a line below the checklist item
-        Line line = new Line(0, 0, 250, 0); // Adjust length as needed
+        Line line = new Line(0, 0, 200, 0); // Adjust length as needed
         line.setStrokeWidth(2);
         line.setStroke(Color.BLACK);
 
@@ -111,9 +111,9 @@ public class ToDoPage {
         TextField textField = new TextField(); // 사용자가 텍스트를 입력할 수 있는 필드
         textField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;"); // 투명 배경 및 테두리 설정
         textField.setFont(Font.font("Arial", 17));
-        textField.setPrefWidth(240); // 텍스트 필드 너비 설정
+        textField.setPrefWidth(190); // 텍스트 필드 너비 설정
 
-        // Add the line and text field to the StackPane
+// Add the line and text field to the StackPane
         lineTextContainer.getChildren().addAll(line, textField); // Line 위에 텍스트 필드를 추가
 
         checklistItemContainer.getChildren().addAll(checklistItem, lineTextContainer); // Add item and line/text field to the container
