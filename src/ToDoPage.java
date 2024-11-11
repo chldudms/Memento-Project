@@ -49,7 +49,7 @@ public class ToDoPage {
         }
 
         // Create a VBox for the main layout
-        mainLayout = new VBox(5); // Use VBox for vertical layout
+        mainLayout = new VBox(8); // Use VBox for vertical layout
         mainLayout.setAlignment(Pos.TOP_CENTER); // Align main layout to the top center
 
         // Create a border pane for the title box
@@ -113,7 +113,7 @@ public class ToDoPage {
         textField.setFont(Font.font("Arial", 17));
         textField.setPrefWidth(190); // 텍스트 필드 너비 설정
 
-// Add the line and text field to the StackPane
+        // Add the line and text field to the StackPane
         lineTextContainer.getChildren().addAll(line, textField); // Line 위에 텍스트 필드를 추가
 
         checklistItemContainer.getChildren().addAll(checklistItem, lineTextContainer); // Add item and line/text field to the container
@@ -127,6 +127,7 @@ public class ToDoPage {
                 if (checklistContainer.getChildren().size() <= 7) {
                     checklistContainer.getChildren().remove(addImageView); // Remove from checklist container
                     checklistContainer.getChildren().add(addImageView); // Add button below the new checklist item
+                    addImageView.setTranslateY(-5);
                 }
                 else {
                     // If there are more than 8 items, ensure the add button is in its original position
