@@ -59,11 +59,7 @@ public class HomePage {
         // 플러스 이미지 로드
         Image plusIcon = new Image("styles/plusBtn.png"); // 이미지 경로 지정
         ImageView plusImageView = new ImageView(plusIcon);
-
-        plusImageView.setFitWidth(60); // 이미지 크기 조정
-        plusImageView.setFitHeight(60);
-
-        plusImageView.setFitWidth(40); // 이미지 크기 조정
+        plusImageView.setFitWidth(40);  // 이미지 크기 조정
         plusImageView.setFitHeight(40);
 
         // 다이어리 생성 버튼

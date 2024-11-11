@@ -36,29 +36,26 @@ public class JoinPage {
         // 아이디 입력 필드
         TextField usernameField = new TextField();
         usernameField.setPromptText("아이디");
-        usernameField.setStyle(
-                "-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4");
-        usernameField.setPrefWidth(250);
-        usernameField.setPrefHeight(50);
-        grid.add(usernameField, 0, 0, 2, 1);
+        usernameField.setStyle("-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4"); 
+        usernameField.setPrefWidth(250); 
+        usernameField.setPrefHeight(50); 
+        grid.add(usernameField, 0, 0, 2, 1); 
 
         // 비밀번호 입력 필드
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("비밀번호");
-        passwordField.setStyle(
-                "-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4");
-        passwordField.setPrefWidth(250);
-        passwordField.setPrefHeight(50);
-        grid.add(passwordField, 0, 1, 2, 1);
+        passwordField.setStyle("-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4");
+        passwordField.setPrefWidth(250); 
+        passwordField.setPrefHeight(50); 
+        grid.add(passwordField, 0, 1, 2, 1); 
 
         // 비밀번호 확인 필드
         PasswordField passwdCheckField = new PasswordField();
         passwdCheckField.setPromptText("비밀번호 확인");
-        passwdCheckField.setStyle(
-                "-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4");
-        passwdCheckField.setPrefWidth(250);
-        passwdCheckField.setPrefHeight(50);
-        grid.add(passwdCheckField, 0, 2, 2, 1);
+        passwdCheckField.setStyle("-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4");
+        passwdCheckField.setPrefWidth(250); 
+        passwdCheckField.setPrefHeight(50); 
+        grid.add(passwdCheckField, 0, 2, 2, 1); 
 
         // 가입 버튼
         Button joinButton = new Button("Join");
@@ -70,7 +67,7 @@ public class JoinPage {
 
         // 로그인 링크
         Hyperlink loginLink = new Hyperlink("Login");
-        loginLink.setStyle("-fx-text-fill: #6FC8FF; -fx-font-size: 18px;");
+        loginLink.setStyle("-fx-text-fill: #6FC8FF; -fx-font-size: 20px;");
         grid.add(loginLink, 0, 4, 2, 1);
         GridPane.setHalignment(loginLink, HPos.CENTER);
 
