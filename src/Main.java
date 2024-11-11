@@ -42,7 +42,7 @@ public class Main extends Application {
         mainLayout.setStyle("-fx-background-color: #FFFFFF;");
 
         // 메인 레이아웃으로 씬 생성
-        Scene mainScene = new Scene(mainLayout, 450, 667);
+        Scene mainScene = new Scene(mainLayout, 360, 640);
         
         // 스테이지 설정
         primaryStage.setTitle("MementoDiary");
@@ -68,13 +68,13 @@ public class Main extends Application {
 
         // "Memento" 로고 생성
         Text logo = new Text("Memento");
-        logo.setFont(Font.font("", FontWeight.NORMAL, 38));  
+        logo.setFont(Font.font("", FontWeight.NORMAL, 35));  
         logo.setFill(Color.SKYBLUE);  
 
         // 로고 아래에 경계선 생성
         Line borderLine = new Line();
         borderLine.setStartX(0);
-        borderLine.setEndX(410); 
+        borderLine.setEndX(320); 
         borderLine.setStroke(Color.PINK);  
         borderLine.setStrokeWidth(2);  
 
