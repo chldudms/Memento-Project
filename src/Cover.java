@@ -9,8 +9,8 @@ public class Cover extends VBox {  // VBox를 사용하여 이미지와 배경�
     
     public Cover(Runnable onCoverClick) {
         // 배경색이 #FFCDE1인 Rectangle 생성
-        Rectangle background1 = new Rectangle(450, 667);  // 크기 설정
-        Rectangle background2 = new Rectangle(65, 667);  // 크기 설정
+        Rectangle background1 = new Rectangle(360, 640);  // 크기 설정
+        Rectangle background2 = new Rectangle(65, 640);  // 크기 설정
         background1.setFill(Color.web("#FFCDE1"));
         background2.setFill(Color.web("#F875AA"));
 
