@@ -3,6 +3,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DB {
     // 데이터베이스 URL, 사용자명 및 비밀번호
@@ -29,7 +32,7 @@ public class DB {
         }
     }
 
-    // 사용자 정보 확인 메소드
+    // 사용자 인증 메서드
     public boolean checkUser(String username, String password) {
         String query = "SELECT * FROM users WHERE username = ? AND password = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
@@ -41,6 +44,34 @@ public class DB {
             e.printStackTrace();
             return false;
         }
+    }
+
+    // 사용자의 가입 날짜를 가져오는 메서드 (yyyy-MM-dd 형식으로 반환)
+    public String getUserRegDate(String username) {
+        String query = "SELECT regDate FROM users WHERE username = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+
+            // 결과가 존재하면 가입 날짜 반환
+            if (rs.next()) {
+                String regDate = rs.getString("regDate");
+
+                // 날짜 형식을 yyyy-MM-dd로 변환
+                SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // 원본 형식
+                SimpleDateFormat targetFormat = new SimpleDateFormat("yyyy-MM-dd"); // 목표 형식
+
+                try {
+                    Date date = originalFormat.parse(regDate); // 원본 형식에서 날짜 객체로 변환
+                    return targetFormat.format(date); // 변환된 날짜 반환
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // 사용자 정보가 없거나 오류 발생 시 null 반환
     }
 
     // 연결 종료 메서드
@@ -61,6 +92,10 @@ public class DB {
         // 예시: 사용자 인증 테스트
         boolean isAuthenticated = db.checkUser("testuser", "testpassword");
         System.out.println("사용자 인증 결과: " + (isAuthenticated ? "성공" : "실패"));
+
+        // 예시: 사용자 가입 날짜 가져오기
+        String regDate = db.getUserRegDate("testuser");
+        System.out.println("가입 날짜: " + regDate);
         
         // 작업 후 연결 종료
         db.close();
