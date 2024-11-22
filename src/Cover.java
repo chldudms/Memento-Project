@@ -12,9 +12,7 @@ public class Cover extends VBox {
     public Cover(Runnable onCoverClick) {
         // 배경색이 #FFCDE1인 Rectangle 생성
         Rectangle background1 = new Rectangle(360, 640);
-        Rectangle background2 = new Rectangle(60, 640);
         background1.setFill(Color.web("#FFCDE1"));
-        background2.setFill(Color.web("#F875AA"));
 
         // 기본 이미지와 마우스 오버 이미지 경로
         Image image1 = new Image("styles/logo.png");
@@ -25,46 +23,51 @@ public class Cover extends VBox {
         ImageView imageView2 = new ImageView(defaultImage);
 
         // 이미지 크기 설정
-        imageView1.setFitWidth(300);
+        imageView1.setFitWidth(330);
         imageView1.setPreserveRatio(true);
-        imageView2.setFitWidth(50);
-        imageView2.setFitHeight(50);
+        imageView2.setFitWidth(60);
+        imageView2.setFitHeight(60);
         imageView2.setPreserveRatio(true);
 
         // 레이아웃 설정
         HBox topLayout = new HBox();
-        topLayout.getChildren().add(background2);
         topLayout.getChildren().add(imageView1);
         topLayout.getChildren().add(background1);
-
         topLayout.setStyle("-fx-background-color: #FFCDE1;");
+
+        // imageView1 위치 조정
+        imageView1.setTranslateX(20);
 
         StackPane stackPane = new StackPane();
         stackPane.setPrefSize(360, 640);
 
-        // imageView2 위치 설정
-        imageView2.setTranslateX(-50);
-        imageView2.setTranslateY(-70);
+        // imageView2 및 이벤트 영역 확장
+        StackPane buttonArea = new StackPane(); // 클릭 및 마우스 오버 이벤트를 감지하는 컨테이너
+        buttonArea.setPrefSize(80, 80); // 확장된 영역 크기
+        buttonArea.setTranslateX(-35); // 이미지 위치와 동일하게 설정
+        buttonArea.setTranslateY(-75);
+        buttonArea.setStyle("-fx-background-color: transparent;"); // 디버깅 중이라면 색상 추가 가능
 
-        stackPane.getChildren().add(imageView2);
-        stackPane.setStyle("-fx-background-color: transparent;");
+        // buttonArea에 imageView2 추가
+        buttonArea.getChildren().add(imageView2);
+        stackPane.getChildren().add(buttonArea);
 
         // VBox에 레이아웃 추가
         this.getChildren().add(topLayout);
         this.getChildren().add(stackPane);
 
-        // 아이콘에 마우스 오버 이벤트 추가
-        imageView2.setOnMouseEntered(event -> {
+        // 이벤트 처리: 확장된 영역에서 동작
+        buttonArea.setOnMouseEntered(event -> {
             imageView2.setImage(hoverImage); // 마우스 오버 시 이미지 교체
         });
 
-        // 아이콘에서 마우스가 떠났을 때 이벤트 추가
-        imageView2.setOnMouseExited(event -> {
+        buttonArea.setOnMouseExited(event -> {
             imageView2.setImage(defaultImage); // 마우스가 떠나면 기본 이미지로 복원
         });
 
-        // 아이콘 클릭 시 메인 화면으로 전환하는 이벤트 추가
-        imageView2.setOnMouseClicked(event -> onCoverClick.run());
+        buttonArea.setOnMouseClicked(event -> {
+            onCoverClick.run(); // 클릭 시 메인 화면으로 전환
+        });
 
         // VBox 클릭 이벤트 무시
         this.setOnMouseClicked(event -> {
