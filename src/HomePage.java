@@ -2,7 +2,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.Button;
-import javafx.scene.text.Text;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
@@ -14,17 +13,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.geometry.Pos; // 중앙 정렬에 필요
 import javafx.scene.control.ScrollPane;
-
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.control.ScrollPane;
-import javafx.geometry.Insets;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 
 public class HomePage {
     private StackPane layout;
@@ -40,7 +28,6 @@ public class HomePage {
         diaryGrid.setHgap(10);
         diaryGrid.setVgap(10);
         diaryContainer = new VBox(10);
-        diaryGrid.setPadding(new Insets(20, 20, 20, 10)); // GridPane에 패딩 추가
 
         // ScrollPane으로 다이어리 목록 감싸기
         ScrollPane scrollPane = new ScrollPane(diaryGrid);
@@ -59,7 +46,7 @@ public class HomePage {
         // 플러스 이미지 로드
         Image plusIcon = new Image("styles/plusBtn.png"); // 이미지 경로 지정
         ImageView plusImageView = new ImageView(plusIcon);
-        plusImageView.setFitWidth(40);  // 이미지 크기 조정
+        plusImageView.setFitWidth(40); // 이미지 크기 조정
         plusImageView.setFitHeight(40);
 
         // 다이어리 생성 버튼
@@ -82,7 +69,6 @@ public class HomePage {
         // 전체 레이아웃에 메인 레이아웃 추가
         layout.getChildren().add(mainLayout);
         layout.setStyle("-fx-background-color: #FFFFFF;"); // Set background color
-        mainLayout.setAlignment(Pos.CENTER);
 
         // layout.setStyle("-fx-padding: 20;");
 
