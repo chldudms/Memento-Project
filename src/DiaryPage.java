@@ -1,42 +1,43 @@
-import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
-import javafx.scene.layout.VBox;
 import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
+import javafx.scene.text.Text;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 public class DiaryPage {
-    private VBox layout;
+    private Scene diaryScene;
 
-    public DiaryPage(String title) {
-        layout = new VBox(20);
-        layout.setAlignment(Pos.CENTER);
+    public DiaryPage(String title, Stage stage) {
+        // 다이어리 세부 페이지 레이아웃
+        VBox diaryLayout = new VBox(20);
+        diaryLayout.setAlignment(Pos.CENTER);
 
-        // 다이어리 제목 텍스트
-        Text diaryTitleText = new Text("다이어리 제목: " + title);
-        diaryTitleText.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        // 다이어리 제목
+        Text diaryTitle = new Text("다이어리 제목: " + title);
+        diaryTitle.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
-        // 내용 작성 버튼
-        Button writeButton = new Button("내용 작성하기");
-        writeButton.setOnAction(e -> {
-            // 내용 작성 버튼 클릭 시 다른 로직 구현 가능
+        // 내용 작성하기 버튼
+        Button writeContentButton = new Button("내용 작성하기");
+        writeContentButton.setOnAction(e -> {
             System.out.println("내용 작성하기 버튼 클릭됨");
         });
 
-        // 페이지로 돌아갈 수 있는 버튼 추가 (HomePage로 돌아가는 기능)
+        // 뒤로 가기 버튼
         Button backButton = new Button("뒤로 가기");
         backButton.setOnAction(e -> {
-            // HomePage로 돌아가기 (예시)
-            HomePage homePage = new HomePage(null); // 여기에 적절한 Main 객체를 전달해야 함
-            layout.getChildren().clear(); // 다이어리 페이지 내용 지우기
-            layout.getChildren().add(homePage.getLayout()); // HomePage로 전환
+            // 메인 화면으로 돌아가기
+            stage.setScene(HomePage.getMainScene());
         });
 
-        // 레이아웃에 버튼과 제목 추가
-        layout.getChildren().addAll(diaryTitleText, writeButton, backButton);
+        diaryLayout.getChildren().addAll(diaryTitle, writeContentButton, backButton);
+
+        // 새로운 Scene 설정
+        diaryScene = new Scene(diaryLayout, 800, 600);
+        stage.setScene(diaryScene);
     }
 
-    public VBox getLayout() {
-        return layout;
+    public Scene getDiaryScene() {
+        return diaryScene;
     }
 }

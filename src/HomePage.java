@@ -1,6 +1,7 @@
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.GridPane;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
@@ -21,6 +22,7 @@ public class HomePage {
     private String selectedCoverColor = "#FFB6C1";
     private VBox diaryContainer;
     private VBox mainLayout; // 메인 레이아웃
+     private static Scene mainScene; // 메인 화면 Scene 저장
 
     public HomePage(Main mainApp) {
         layout = new StackPane();
@@ -28,7 +30,7 @@ public class HomePage {
         diaryGrid.setHgap(10);
         diaryGrid.setVgap(10);
         diaryContainer = new VBox(10);
-
+    
         // ScrollPane으로 다이어리 목록 감싸기
         ScrollPane scrollPane = new ScrollPane(diaryGrid);
         scrollPane.setFitToWidth(true);
@@ -70,6 +72,7 @@ public class HomePage {
         // 전체 레이아웃에 메인 레이아웃 추가
         layout.getChildren().add(mainLayout);
         layout.setStyle("-fx-background-color: #FFFFFF;"); // Set background color
+        
 
         // layout.setStyle("-fx-padding: 20;");
 
@@ -81,9 +84,8 @@ public class HomePage {
     }
 
     public void addDiary(String title, String cover) {
-        // 다이어리 카드 생성
         DiaryCard diaryCard = new DiaryCard(title, cover);
-        int rowCount = diaryGrid.getChildren().size() / 2; // 한 줄에 다이어리 두 개씩
+        int rowCount = diaryGrid.getChildren().size() / 2; // 한 줄에 두 개씩 배치
         diaryGrid.add(diaryCard.getLayout(), diaryGrid.getChildren().size() % 2, rowCount);
         createDiaryPane.setVisible(false);
     }
@@ -180,4 +182,12 @@ public class HomePage {
     private void openDiaryCreationPane() {
         createDiaryPane.setVisible(true);
     }
+
+    public static Scene getMainScene() {
+        if (mainScene == null) {
+            throw new IllegalStateException("mainScene이 초기화되지 않았습니다.");
+        }
+        return mainScene;
+    }
+
 }
