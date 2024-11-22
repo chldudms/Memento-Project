@@ -1,40 +1,73 @@
+import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class Cover extends VBox { // VBox를 사용하여 이미지와 배경을 수직으로 배치
+public class Cover extends VBox {
 
     public Cover(Runnable onCoverClick) {
         // 배경색이 #FFCDE1인 Rectangle 생성
-        Rectangle background1 = new Rectangle(450, 667); // 크기 설정
-        Rectangle background2 = new Rectangle(65, 667); // 크기 설정
+        Rectangle background1 = new Rectangle(360, 640);
+        Rectangle background2 = new Rectangle(60, 640);
         background1.setFill(Color.web("#FFCDE1"));
         background2.setFill(Color.web("#F875AA"));
 
-        // 이미지 추가
-        Image image = new Image("styles/logo.png"); // 이미지 경로 확인
-        ImageView imageView = new ImageView(image);
+        // 기본 이미지와 마우스 오버 이미지 경로
+        Image image1 = new Image("styles/logo.png");
+        ImageView imageView1 = new ImageView(image1);
 
-        // 이미지 너비
-        imageView.setFitWidth(380); // 이미지 너비 설정
-        imageView.setPreserveRatio(true); // 비율 유지
+        Image defaultImage = new Image("styles/nextBtn.png"); // 기본 아이콘 이미지
+        Image hoverImage = new Image("styles/pinkNextBtn.png"); // 마우스 오버 아이콘 이미지
+        ImageView imageView2 = new ImageView(defaultImage);
 
-        // 이미지가 background2와 겹치지 않도록 별도의 레이아웃을 사용
+        // 이미지 크기 설정
+        imageView1.setFitWidth(300);
+        imageView1.setPreserveRatio(true);
+        imageView2.setFitWidth(50);
+        imageView2.setFitHeight(50);
+        imageView2.setPreserveRatio(true);
+
+        // 레이아웃 설정
         HBox topLayout = new HBox();
-        topLayout.getChildren().add(background2); // background2는 왼쪽에 배치
-        topLayout.getChildren().add(imageView); // 그 오른쪽에 이미지 배치
-        topLayout.getChildren().add(background1); // background1은 그 오른쪽에 배치
+        topLayout.getChildren().add(background2);
+        topLayout.getChildren().add(imageView1);
+        topLayout.getChildren().add(background1);
 
-        // topLayout의 배경색을 설정하여 이미지 배경에 색깔을 추가
-        topLayout.setStyle("-fx-background-color: #FFCDE1;"); // 원하는 색상으로 설정
+        topLayout.setStyle("-fx-background-color: #FFCDE1;");
 
-        // VBox에 이미지와 배경을 추가
+        StackPane stackPane = new StackPane();
+        stackPane.setPrefSize(360, 640);
+
+        // imageView2 위치 설정
+        imageView2.setTranslateX(-50);
+        imageView2.setTranslateY(-70);
+
+        stackPane.getChildren().add(imageView2);
+        stackPane.setStyle("-fx-background-color: transparent;");
+
+        // VBox에 레이아웃 추가
         this.getChildren().add(topLayout);
+        this.getChildren().add(stackPane);
 
-        // 클릭 시 메인 화면으로 전환하는 이벤트 추가
-        this.setOnMouseClicked(event -> onCoverClick.run());
+        // 아이콘에 마우스 오버 이벤트 추가
+        imageView2.setOnMouseEntered(event -> {
+            imageView2.setImage(hoverImage); // 마우스 오버 시 이미지 교체
+        });
+
+        // 아이콘에서 마우스가 떠났을 때 이벤트 추가
+        imageView2.setOnMouseExited(event -> {
+            imageView2.setImage(defaultImage); // 마우스가 떠나면 기본 이미지로 복원
+        });
+
+        // 아이콘 클릭 시 메인 화면으로 전환하는 이벤트 추가
+        imageView2.setOnMouseClicked(event -> onCoverClick.run());
+
+        // VBox 클릭 이벤트 무시
+        this.setOnMouseClicked(event -> {
+        });
     }
 }
