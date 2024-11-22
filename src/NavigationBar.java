@@ -8,20 +8,20 @@ import javafx.geometry.Insets;
 public class NavigationBar {
     private HBox navigationBar;
     private Main mainApp;
-    private StackPane selectedSection;  // 현재 선택된 섹션을 저장하는 변수
+    private StackPane selectedSection; // 현재 선택된 섹션을 저장하는 변수
     private ImageView homeImageView;
     private ImageView toDoImageView;
     private ImageView loginImageView;
 
     // Constructor now takes Main as a parameter
     public NavigationBar(StackPane homepage, StackPane toDopage, StackPane loginpage, Main mainApp) {
-        this.mainApp = mainApp;  // Save reference to the Main class
+        this.mainApp = mainApp; // Save reference to the Main class
 
         // Bottom Navigation Bar Sections (Home, To-Do, Login)
         navigationBar = new HBox();
-        navigationBar.setPadding(new Insets(5));  // Padding 유지
+        navigationBar.setPadding(new Insets(5)); // Padding 유지
         navigationBar.setSpacing(40); // 요소 사이 간격을 줄임
-        navigationBar.setStyle("-fx-background-color:  #FFCDE1; -fx-pref-height: 40px;");  // 높이를 줄이기 위한 pref-height 추가
+        navigationBar.setStyle("-fx-background-color:  #FFCDE1; -fx-pref-height: 40px;"); // 높이를 줄이기 위한 pref-height 추가
         navigationBar.setAlignment(Pos.CENTER);
 
         // Create navigation sections with images
@@ -50,10 +50,10 @@ public class NavigationBar {
 
         // 로그인 아이콘만 이미지 크기가 작아서 조정
         if (imagePath.contains("login")) {
-            imageView.setFitHeight(50);  // 로그인 아이콘의 크기 조정
+            imageView.setFitHeight(50); // 로그인 아이콘의 크기 조정
             imageView.setFitWidth(50);
         } else {
-            imageView.setFitHeight(30);  // 다른 아이콘 크기
+            imageView.setFitHeight(30); // 다른 아이콘 크기
             imageView.setFitWidth(30);
         }
 
@@ -71,7 +71,7 @@ public class NavigationBar {
         // 섹션 클릭 시 선택 상태로 변경
         section.setOnMouseClicked(e -> {
             mainApp.getMainLayout().setCenter(page); // Update center content on click
-            selectSection(section, imageView, selectedImagePath);  // 클릭된 섹션을 선택 상태로 설정
+            selectSection(section, imageView, selectedImagePath); // 클릭된 섹션을 선택 상태로 설정
         });
 
         return section;
@@ -92,7 +92,7 @@ public class NavigationBar {
 
         // 현재 선택된 섹션의 이미지를 선택된 이미지로 변경
         currentImageView.setImage(new Image(selectedImagePath));
-        selectedSection = section;  // 선택된 섹션을 현재 섹션으로 업데이트
+        selectedSection = section; // 선택된 섹션을 현재 섹션으로 업데이트
     }
 
     public HBox getLayout() {
