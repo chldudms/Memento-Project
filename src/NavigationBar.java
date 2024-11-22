@@ -2,6 +2,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
 
@@ -12,12 +13,13 @@ public class NavigationBar {
     private ImageView homeImageView;
     private ImageView toDoImageView;
     private ImageView loginImageView;
+    private ImageView myPageImageView; // 오타 수정
 
     // Constructor now takes Main as a parameter
-    public NavigationBar(StackPane homepage, StackPane toDopage, StackPane loginpage, Main mainApp) {
+    public NavigationBar(StackPane homepage, StackPane toDopage, StackPane loginpage, VBox mypage, Main mainApp) {
         this.mainApp = mainApp; // Save reference to the Main class
 
-        // Bottom Navigation Bar Sections (Home, To-Do, Login)
+        // Bottom Navigation Bar Sections (Home, To-Do, Login, MyPage)
         navigationBar = new HBox();
         navigationBar.setPadding(new Insets(5)); // Padding 유지
         navigationBar.setSpacing(40); // 요소 사이 간격을 줄임
@@ -28,7 +30,6 @@ public class NavigationBar {
         StackPane homeSection = createNavSection("styles/home.png", "styles/homePink.png", homepage, true);
         StackPane toDoSection = createNavSection("styles/todo.png", "styles/todoPink.png", toDopage, false);
         StackPane loginSection = createNavSection("styles/login.png", "styles/loginPink.png", loginpage, false);
-
         // Add sections to the navigation bar
         navigationBar.getChildren().addAll(homeSection, toDoSection, loginSection);
 
@@ -68,6 +69,17 @@ private StackPane createNavSection(String imagePath, String selectedImagePath, S
         loginImageView = imageView;
     }
 
+        // 아이콘에 대한 참조 저장
+        if (isHome) {
+            homeImageView = imageView;
+        } else if (imagePath.contains("todo")) {
+            toDoImageView = imageView;
+        } else if (imagePath.contains("login")) {
+            loginImageView = imageView;
+        } else if (imagePath.contains("mypage")) {
+            myPageImageView = imageView; // MyPage 아이콘 참조 저장
+        }
+
     // 섹션 클릭 시 선택 상태로 변경
     section.setOnMouseClicked(e -> {
         // Ensure page is not null before updating center
@@ -93,6 +105,8 @@ private StackPane createNavSection(String imagePath, String selectedImagePath, S
                 toDoImageView.setImage(new Image("styles/todo.png"));
             } else if (selectedSection == loginImageView.getParent()) {
                 loginImageView.setImage(new Image("styles/login.png"));
+            } else if (selectedSection == myPageImageView.getParent()) {
+                myPageImageView.setImage(new Image("styles/mypage.png"));
             }
         }
 

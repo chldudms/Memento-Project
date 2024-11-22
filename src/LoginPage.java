@@ -3,6 +3,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.geometry.Insets;
@@ -81,12 +82,30 @@ public class LoginPage {
         loginButton.setOnAction(e -> {
             String username = usernameField.getText();
             String password = passwordField.getText();
-            if (validateUser(username, password)) {
+
+            // DB 객체 생성
+            DB db = new DB();
+            
+            if (db.checkUser(username, password)) {
                 System.out.println("로그인 성공!");
-                // 로그인 성공 시 추가 동작 구현
+                
+                // DB에서 사용자 가입 날짜 가져오기
+                String regDate = db.getUserRegDate(username);
+
+                if (regDate != null) {
+                    // 로그인 성공 시 regDate와 username을 MyPage로 전달
+                    MyPage myPage = new MyPage(username, regDate);
+                    Scene scene = new Scene(myPage.getLayout(), 360, 640);
+                    primaryStage.setScene(scene); // 새로운 씬으로 변경
+                } else {
+                    System.out.println("가입 날짜를 가져오지 못했습니다.");
+                }
             } else {
                 System.out.println("아이디 또는 비밀번호가 잘못되었습니다.");
             }
+
+            // DB 연결 종료
+            db.close();
         });
 
         // 그리드를 메인 콘텐츠 StackPane에 추가
