@@ -1,6 +1,7 @@
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.GridPane;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
@@ -21,8 +22,9 @@ public class HomePage {
     private String selectedCoverColor = "#FFB6C1";
     private VBox diaryContainer;
     private VBox mainLayout; // 메인 레이아웃
+    private static Scene mainScene; // 메인 화면 Scene 저장
 
-    public HomePage(Main mainApp) {
+    public HomePage() {
         layout = new StackPane();
         diaryGrid = new GridPane();
         diaryGrid.setHgap(10);
@@ -33,27 +35,24 @@ public class HomePage {
         ScrollPane scrollPane = new ScrollPane(diaryGrid);
         scrollPane.setFitToWidth(true);
         scrollPane.setPrefHeight(1000);
-        scrollPane.getStyleClass().clear(); // 기본 스타일 제거
-        // scrollPane.setStyle("-fx-background-color: transparent; -fx-border-color:
-        // transparent;");
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // 세로 스크롤 바 항상 보이기
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // 가로 스크롤 바는 보이지 않게 설정
+        scrollPane.getStyleClass().clear();
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         // 메인 레이아웃 초기화
         mainLayout = new VBox(10);
-        mainLayout.setPadding(new Insets(10)); // Padding 추가
+        mainLayout.setPadding(new Insets(10));
 
         // 플러스 이미지 로드
-        Image plusIcon = new Image("styles/plusBtn.png"); // 이미지 경로 지정
+        Image plusIcon = new Image("styles/plusBtn.png");
         ImageView plusImageView = new ImageView(plusIcon);
 
-        plusImageView.setFitWidth(40); // 이미지 크기 조정
+        plusImageView.setFitWidth(40);
         plusImageView.setFitHeight(40);
 
         // 다이어리 생성 버튼
         Button createDiaryButton = new Button();
-        createDiaryButton.setGraphic(plusImageView); // 이미지 추가
-        // 버튼의 기본 배경과 테두리 제거
+        createDiaryButton.setGraphic(plusImageView);
         createDiaryButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 0;");
         createDiaryButton.setOnAction(e -> openDiaryCreationPane());
 
@@ -62,28 +61,21 @@ public class HomePage {
         AnchorPane.setBottomAnchor(createDiaryButton, 5.0);
         AnchorPane.setRightAnchor(createDiaryButton, 10.0);
 
-        // 메인 레이아웃에 ScrollPane 추가
-        // mainLayout.getChildren().add(scrollPane);
-        // 메인 레이아웃에 ScrollPane과 버튼 추가
         mainLayout.getChildren().addAll(scrollPane, buttonContainer);
 
-        // 전체 레이아웃에 메인 레이아웃 추가
         layout.getChildren().add(mainLayout);
-        layout.setStyle("-fx-background-color: #FFFFFF;"); // Set background color
+        layout.setStyle("-fx-background-color: #FFFFFF;");
 
-        // layout.setStyle("-fx-padding: 20;");
-
-        // 다이어리 생성 UI 생성
         createDiaryPane = createDiaryUI();
         layout.getChildren().add(createDiaryPane);
-        createDiaryPane.setVisible(false); // 다이어리 생성 페이지 숨기기
+        createDiaryPane.setVisible(false);
 
+        mainScene = new Scene(layout, 800, 600);
     }
 
     public void addDiary(String title, String cover) {
-        // 다이어리 카드 생성
         DiaryCard diaryCard = new DiaryCard(title, cover);
-        int rowCount = diaryGrid.getChildren().size() / 2; // 한 줄에 다이어리 두 개씩
+        int rowCount = diaryGrid.getChildren().size() / 2; // 한 줄에 두 개씩 배치
         diaryGrid.add(diaryCard.getLayout(), diaryGrid.getChildren().size() % 2, rowCount);
         createDiaryPane.setVisible(false);
     }
@@ -147,7 +139,7 @@ public class HomePage {
         createButton.setTranslateY(10); // 버튼을 살짝 아래로 이동
         diaryCreationLayout.setMaxWidth(300); // 최대 너비 설정
         diaryCreationLayout.setMaxHeight(300); // 최대 높이 설정 (정사각형)
-
+        
         createButton.setOnAction(e -> {
             String title = titleField.getText();
             if (!title.isEmpty()) {
@@ -180,4 +172,16 @@ public class HomePage {
     private void openDiaryCreationPane() {
         createDiaryPane.setVisible(true);
     }
+
+    public static Scene getMainScene() {
+        if (mainScene == null) {
+            throw new IllegalStateException("mainScene이 초기화되지 않았습니다.");
+        }
+        return mainScene;
+    }
+
+    public static void setMainScene(Scene scene) {
+        mainScene = scene;
+    }
+
 }

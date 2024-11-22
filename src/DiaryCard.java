@@ -1,20 +1,14 @@
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 public class DiaryCard {
     private StackPane layout;
     private String title;
     private String coverColor;
-    private HomePage homePage; // HomePage 인스턴스를 클래스 변수로 설정
 
     // Constructor takes in a title and cover color
     public DiaryCard(String title, String coverColor) {
@@ -37,35 +31,10 @@ public class DiaryCard {
     }
 
     private void handleCardClick(MouseEvent event) {
-        // 클릭 시 새로운 페이지를 띄우는 메서드 호출
-        openDiaryPage(title);
-    }
-
-    // Replace the content of the current page with the diary details
-    private void openDiaryPage(String title) {
-        // Assuming the HomePage class is the parent, pass this reference to it
-
-        // Create new content to simulate the "new page" effect in the same window
-        VBox vbox = new VBox(20);
-        vbox.setAlignment(Pos.CENTER);
-
-        // Diary title
-        Text diaryTitleText = new Text("다이어리 제목: " + title);
-        diaryTitleText.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
-
-        // Add a button to simulate writing content
-        Button writeButton = new Button("내용 작성하기");
-        writeButton.setOnAction(e -> {
-            // Handle content writing logic here
-            System.out.println("내용 작성하기 버튼 클릭됨");
-        });
-
-        vbox.getChildren().addAll(diaryTitleText, writeButton);
-
-        // Update the content in the same Stage/Scene
-        Scene newScene = new Scene(vbox, 800, 640);
+        // 다이어리 페이지로 이동
+        DiaryPage diaryPage = new DiaryPage(title, (Stage) layout.getScene().getWindow());
         Stage currentStage = (Stage) layout.getScene().getWindow();
-        currentStage.setScene(newScene); // Set the new scene to show diary details
+        currentStage.setScene(diaryPage.getScene());
     }
 
     public StackPane getLayout() {

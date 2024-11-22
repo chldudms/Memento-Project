@@ -22,9 +22,9 @@ public class Main extends Application {
         public void start(Stage primaryStage) {
                 // Cover 화면 생성 및 클릭 이벤트 설정
                 Cover cover = new Cover(this::switchToHomePage);
-
+                                      
                 // 페이지 생성 (홈, 할 일, 로그인, 가입)
-                homePage = new HomePage(this); // 초기화된 HomePage 인스턴스 생성
+                homePage = new HomePage(); // 초기화된 HomePage 인스턴스 생성
                 ToDoPage toDoPage = new ToDoPage();
                 LoginPage loginPage = new LoginPage(primaryStage);
                 JoinPage joinPage = new JoinPage(primaryStage);

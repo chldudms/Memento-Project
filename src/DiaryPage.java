@@ -1,42 +1,59 @@
-import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
-import javafx.scene.layout.VBox;
 import javafx.scene.Scene;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.stage.Stage;
+import javafx.scene.control.Label; // Label 클래스 임포트
 
 public class DiaryPage {
-    private VBox layout;
+    private Scene scene;
 
-    public DiaryPage(String title) {
-        layout = new VBox(20);
-        layout.setAlignment(Pos.CENTER);
+    public DiaryPage(String diaryTitle, Stage currentStage) {
+        // Root Layout
+        StackPane root = new StackPane();
+        root.setStyle("-fx-background-color: #FFFFFF;");
 
-        // 다이어리 제목 텍스트
-        Text diaryTitleText = new Text("다이어리 제목: " + title);
-        diaryTitleText.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        // Pages Layout
+        HBox pagesLayout = new HBox(10);
+        pagesLayout.setPadding(new Insets(20));
+        pagesLayout.setStyle("-fx-border-color: #A7A7A7; -fx-border-width: 2px; -fx-border-radius: 5;");
 
-        // 내용 작성 버튼
-        Button writeButton = new Button("내용 작성하기");
-        writeButton.setOnAction(e -> {
-            // 내용 작성 버튼 클릭 시 다른 로직 구현 가능
-            System.out.println("내용 작성하기 버튼 클릭됨");
-        });
+        // Left Page
+        VBox leftPage = new VBox();
+        leftPage.setStyle("-fx-background-color: #F8F8F8; -fx-padding: 20;");
+        leftPage.getChildren().add(new Text("Left Page: " + diaryTitle));
 
-        // 페이지로 돌아갈 수 있는 버튼 추가 (HomePage로 돌아가는 기능)
-        Button backButton = new Button("뒤로 가기");
+        // Right Page
+        VBox rightPage = new VBox();
+        rightPage.setStyle("-fx-background-color: #F8F8F8; -fx-padding: 20;");
+        rightPage.getChildren().add(new Text("Right Page"));
+
+        pagesLayout.getChildren().addAll(leftPage, rightPage);
+
+        // Back Button (DiaryPage에서 홈으로 돌아가기)
+        Button backButton = new Button("Back");
+        backButton.setStyle("-fx-background-color: #FFC0CB; -fx-text-fill: white;");
         backButton.setOnAction(e -> {
-            // HomePage로 돌아가기 (예시)
-            HomePage homePage = new HomePage(null); // 여기에 적절한 Main 객체를 전달해야 함
-            layout.getChildren().clear(); // 다이어리 페이지 내용 지우기
-            layout.getChildren().add(homePage.getLayout()); // HomePage로 전환
+            if (currentStage != null) {
+                HomePage homePage = new HomePage(); // 홈 페이지 생성
+                currentStage.setScene(homePage.getMainScene()); // 홈 페이지의 Scene으로 설정
+            } else {
+                System.err.println("Error: currentStage is null.");
+            }
         });
 
-        // 레이아웃에 버튼과 제목 추가
-        layout.getChildren().addAll(diaryTitleText, writeButton, backButton);
+        StackPane.setAlignment(backButton, Pos.TOP_LEFT);
+        StackPane.setMargin(backButton, new Insets(10));
+        root.getChildren().addAll(pagesLayout, backButton);
+        scene = new Scene(root, 800, 600);
     }
 
-    public VBox getLayout() {
-        return layout;
+    public Scene getScene() {
+        return scene;
     }
 }
