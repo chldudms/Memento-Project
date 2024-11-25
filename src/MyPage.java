@@ -1,13 +1,15 @@
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class MyPage {
-    private VBox layout;
+    private StackPane layout;
+    private StackPane loginPageLayer;
     private String username;
     private String regDate; // 가입 날짜 필드
 
@@ -42,10 +44,10 @@ public class MyPage {
         this.regDate = regDate;
 
         // 레이아웃 설정
-        layout = new VBox();
+        layout = new StackPane();
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(20));
-        layout.setSpacing(15);
+        // layout.setSpacing(15);
 
         // "My Page" 제목
         Text title = new Text("My Page");
@@ -75,7 +77,7 @@ public class MyPage {
     }
 
     // 레이아웃 반환 메서드
-    public VBox getLayout() {
+    public StackPane getLayout() {
         return layout;
     }
 }
