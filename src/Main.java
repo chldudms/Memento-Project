@@ -15,8 +15,6 @@ import javafx.scene.shape.Line;
 public class Main extends Application {
         private BorderPane mainLayout;
         private HomePage homePage; // HomePage 인스턴스를 클래스 변수로 설정
-        String username = "testUser";  // 테스트 사용자 이름
-        String regDate = "2024-11-22"; // 테스트 가입 날짜
                 
         @Override
         public void start(Stage primaryStage) {
@@ -27,7 +25,6 @@ public class Main extends Application {
                 homePage = new HomePage(); // 초기화된 HomePage 인스턴스 생성
                 ToDoPage toDoPage = new ToDoPage();
                 LoginPage loginPage = new LoginPage(primaryStage);
-                MyPage myPage = new MyPage(username, regDate); // 사용자 이름을 전달
 
                 // 하단 네비게이션 바 생성
                 NavigationBar navigationBar = new NavigationBar(

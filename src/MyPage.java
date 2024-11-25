@@ -1,53 +1,27 @@
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 
 public class MyPage {
-    private StackPane layout;
-    private StackPane loginPageLayer;
-    private String username;
-    private String regDate; // 가입 날짜 필드
+    private StackPane layout; // MyPage 레이아웃
+    private StackPane loginPageLayer; // LoginPage 레이아웃을 담을 StackPane
 
-    // 사용자 정보를 위한 클래스
-    public class User {
-        private String username;
-        private String profileImage;
-        private String regDate; // 가입 날짜 필드
-
-        public User(String username, String profileImage, String regDate) {
-            this.username = username;
-            this.profileImage = profileImage;
-            this.regDate = regDate;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public String getProfileImage() {
-            return profileImage;
-        }
-
-        public String getRegDate() {
-            return regDate; // 가입 날짜 반환
-        }
-    }
-
-    // MyPage 생성자에서 username과 regDate 전달받음
-    public MyPage(String username, String regDate) {
-        this.username = username;
-        this.regDate = regDate;
-
-        // 레이아웃 설정
+    public MyPage(String username, String regDate, Stage primaryStage) {
+        // 최상위 레이아웃
         layout = new StackPane();
-        layout.setAlignment(Pos.CENTER);
-        layout.setPadding(new Insets(20));
-        // layout.setSpacing(15);
+
+        // 콘텐츠 레이아웃: VBox
+        VBox contentBox = new VBox();
+        contentBox.setPadding(new Insets(20));
+        contentBox.setSpacing(20); // 요소 간 간격
+        contentBox.setAlignment(Pos.CENTER); // 중앙 정렬
 
         // "My Page" 제목
         Text title = new Text("My Page");
@@ -67,16 +41,29 @@ public class MyPage {
 
         // 로그아웃 버튼
         Button logoutButton = new Button("Logout");
+        logoutButton.setStyle("-fx-font-size: 16px; -fx-background-color: #FFCDE1; -fx-text-fill: #F875AA;");
+
+        // 로그아웃 버튼 클릭 이벤트
         logoutButton.setOnAction(e -> {
-            System.out.println("Logout clicked!");
-            // 로그아웃 동작 추가 (예: 로그인 페이지로 돌아가기)
+            // LoginPage 레이아웃을 처음 클릭 시 생성
+            if (loginPageLayer == null) { 
+                loginPageLayer = new StackPane();
+                LoginPage loginPage = new LoginPage(primaryStage);
+                loginPageLayer.getChildren().add(loginPage.getLayout());
+                layout.getChildren().add(loginPageLayer); // layout에 loginPageLayer 추가
+            }
+
+            // LoginPage 레이아웃을 표시
+            loginPageLayer.setVisible(true);
         });
 
-        // 레이아웃에 컴포넌트 추가
-        layout.getChildren().addAll(title, userInfo, profileText, joinDateText, logoutButton);
+        // VBox에 요소 추가
+        contentBox.getChildren().addAll(title, userInfo, profileText, joinDateText, logoutButton);
+
+        // StackPane에 VBox 추가
+        layout.getChildren().add(contentBox);
     }
 
-    // 레이아웃 반환 메서드
     public StackPane getLayout() {
         return layout;
     }
