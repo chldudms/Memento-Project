@@ -1,14 +1,11 @@
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
-import javafx.scene.control.Label; // Label 클래스 임포트
 
 public class DiaryPage {
     private Scene scene;
@@ -32,6 +29,13 @@ public class DiaryPage {
         VBox rightPage = new VBox();
         rightPage.setStyle("-fx-background-color: #F8F8F8; -fx-padding: 20;");
         rightPage.getChildren().add(new Text("Right Page"));
+
+        // 동적 크기 조정을 위한 Binding
+        pagesLayout.widthProperty().addListener((obs, oldVal, newVal) -> {
+            double halfWidth = newVal.doubleValue() / 2 - 5; // HBox 간격(10px)을 반으로 나눔
+            leftPage.setPrefWidth(halfWidth);
+            rightPage.setPrefWidth(halfWidth);
+        });
 
         pagesLayout.getChildren().addAll(leftPage, rightPage);
 
