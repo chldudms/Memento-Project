@@ -1,7 +1,18 @@
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.stage.Stage;
+
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -9,52 +20,72 @@ import javafx.stage.Stage;
 
 public class DiaryPage {
     private Scene scene;
+    Main main = new Main();
 
-    public DiaryPage(String diaryTitle, Stage currentStage) {
-        // Root Layout
+    public DiaryPage(String diaryTitle, Stage currentStage, Runnable onBack) {
         StackPane root = new StackPane();
         root.setStyle("-fx-background-color: #FFFFFF;");
 
-        // Pages Layout
-        HBox pagesLayout = new HBox(10);
-        pagesLayout.setPadding(new Insets(20));
-        pagesLayout.setStyle("-fx-border-color: #A7A7A7; -fx-border-width: 2px; -fx-border-radius: 5;");
+        VBox mainLayout = new VBox(10);
+        mainLayout.setPadding(new Insets(20));
+        mainLayout.setAlignment(Pos.TOP_CENTER);
 
-        // Left Page
-        VBox leftPage = new VBox();
-        leftPage.setStyle("-fx-background-color: #F8F8F8; -fx-padding: 20;");
-        leftPage.getChildren().add(new Text("Left Page: " + diaryTitle));
+        Text diaryTitleText = new Text(diaryTitle);
+        diaryTitleText.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+        mainLayout.getChildren().add(diaryTitleText);
 
-        // Right Page
-        VBox rightPage = new VBox();
-        rightPage.setStyle("-fx-background-color: #F8F8F8; -fx-padding: 20;");
-        rightPage.getChildren().add(new Text("Right Page"));
+        // 여백 추가
+        Region spacer = new Region();
+        spacer.setPrefHeight(300);   //버튼 밑으로 더 내리기 
+        VBox.setVgrow(spacer, Priority.ALWAYS);
 
-        // 동적 크기 조정을 위한 Binding
-        pagesLayout.widthProperty().addListener((obs, oldVal, newVal) -> {
-            double halfWidth = newVal.doubleValue() / 2 - 5; // HBox 간격(10px)을 반으로 나눔
-            leftPage.setPrefWidth(halfWidth);
-            rightPage.setPrefWidth(halfWidth);
-        });
+        // 하단 버튼 영역
+        HBox bottomButtonBox = new HBox(300);
+        bottomButtonBox.setAlignment(Pos.BOTTOM_CENTER);
+        bottomButtonBox.setPadding(new Insets(0, 0, 0, 0));
 
-        pagesLayout.getChildren().addAll(leftPage, rightPage);
+        // 왼쪽 공유 버튼
+        HBox leftButtonBox = new HBox();
+        leftButtonBox.setAlignment(Pos.BOTTOM_LEFT);
+        Button shareButton = createIconButton("styles/share.png", "공유");
+        shareButton.setOnAction(e -> System.out.println("공유 버튼 클릭!"));
+        leftButtonBox.getChildren().add(shareButton);
 
-        // Back Button (DiaryPage에서 홈으로 돌아가기)
-        Button backButton = new Button("Back");
+        // 오른쪽 4개 버튼
+        HBox rightButtonBox = new HBox(10);
+        rightButtonBox.setAlignment(Pos.BOTTOM_RIGHT);
+        Button textButton = createIconButton("styles/text.png", "텍스트");
+        Button stickerButton = createIconButton("styles/sticker.png", "스티커");
+        Button photoButton = createIconButton("styles/upload.png", "사진");
+        Button saveButton = createIconButton("styles/save.png", "저장");
+        rightButtonBox.getChildren().addAll(textButton, stickerButton, photoButton, saveButton);
+
+        bottomButtonBox.getChildren().addAll(leftButtonBox, rightButtonBox);
+
+        // 스페이서와 버튼 박스 추가
+        mainLayout.getChildren().addAll(spacer, bottomButtonBox);
+
+        // 돌아가기 버튼 (오른쪽 상단)
+        Button backButton = new Button("뒤로");
         backButton.setStyle("-fx-background-color: #FFC0CB; -fx-text-fill: white;");
-        backButton.setOnAction(e -> {
-            if (currentStage != null) {
-                HomePage homePage = new HomePage(); // 홈 페이지 생성
-                currentStage.setScene(homePage.getMainScene()); // 홈 페이지의 Scene으로 설정
-            } else {
-                System.err.println("Error: currentStage is null.");
-            }
-        });
+        backButton.setOnAction(e -> onBack.run());
 
-        StackPane.setAlignment(backButton, Pos.TOP_LEFT);
+        root.getChildren().addAll(mainLayout, backButton);
+        StackPane.setAlignment(backButton, Pos.TOP_RIGHT);
         StackPane.setMargin(backButton, new Insets(10));
-        root.getChildren().addAll(pagesLayout, backButton);
-        scene = new Scene(root, 800, 600);
+
+        this.scene = new Scene(root, 800, 600);
+    }
+    // createIconButton method remains the same
+    private Button createIconButton(String imagePath, String tooltipText) {
+        Button button = new Button();
+        ImageView icon = new ImageView(new Image(imagePath));
+        icon.setFitWidth(70);
+        icon.setFitHeight(70);
+        button.setGraphic(icon);
+        button.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
+        button.setTooltip(new javafx.scene.control.Tooltip(tooltipText));
+        return button;
     }
 
     public Scene getScene() {

@@ -32,11 +32,12 @@ public class Main extends Application {
 
                 // 하단 네비게이션 바 생성
                 NavigationBar navigationBar = new NavigationBar(
-                        homePage.getLayout(),
-                        toDoPage.getLayout(),
-                        loginPage.getLayout(),
-                        myPage.getLayout(),
-                        this);
+                                homePage.getLayout(),
+                                toDoPage.getLayout(),
+                                loginPage.getLayout(),
+                                myPage.getLayout(),
+                                this // Main 객체 전달
+                );              
 
                 // 레이아웃 설정 및 초기화면을 Cover로 설정
                 mainLayout = new BorderPane();
@@ -94,14 +95,27 @@ public class Main extends Application {
                 return topLayout;
         }
 
-        // getMainLayout() 메서드 추가
+        public Scene getMainScene() {
+                return new Scene(mainLayout, 360, 640);
+        }
+
         public BorderPane getMainLayout() {
                 return mainLayout;
         }
 
-        
+        // 다이어리 페이지로 전환 메소드 활성화 및 구현
+        public void switchToDiaryPage(Stage currentStage, String diaryTitle) {
+                // DiaryPage로 전환
+                DiaryPage diaryPage = new DiaryPage(diaryTitle, currentStage, () -> {
+                        // 뒤로가기 버튼 누르면 홈으로 복귀
+                        currentStage.setScene(getMainScene());
+                });
+                currentStage.setScene(getMainScene());
+        }
 
         public static void main(String[] args) {
                 launch(args);
         }
+
+        
 }

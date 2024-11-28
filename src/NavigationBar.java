@@ -82,12 +82,11 @@ private StackPane createNavSection(String imagePath, String selectedImagePath, S
 
     // 섹션 클릭 시 선택 상태로 변경
     section.setOnMouseClicked(e -> {
-        // Ensure page is not null before updating center
-        if (page != null) {
-            mainApp.getMainLayout().setCenter(page); // Update center content on click
-            selectSection(section, imageView, selectedImagePath); // 클릭된 섹션을 선택 상태로 설정
+        if (mainApp != null && page != null) {
+            mainApp.getMainLayout().setCenter(page); // BorderPane에서 콘텐츠 변경
+            selectSection(section, imageView, selectedImagePath); // 섹션 선택
         } else {
-            System.out.println("Page is null!"); // 페이지가 null일 경우 디버깅
+            System.out.println("Error: mainApp or page is null.");
         }
     });
 
