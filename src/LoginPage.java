@@ -36,8 +36,7 @@ public class LoginPage {
         // 아이디 입력 필드 (크기 조정)
         TextField usernameField = new TextField();
         usernameField.setPromptText("아이디");
-        usernameField.setStyle(
-                "-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4");
+        usernameField.setStyle("-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4");
         usernameField.setPrefWidth(250);
         usernameField.setPrefHeight(50);
         grid.add(usernameField, 0, 0, 2, 1);
@@ -45,16 +44,14 @@ public class LoginPage {
         // 비밀번호 입력 필드 (크기 조정)
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("비밀번호");
-        passwordField.setStyle(
-                "-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4");
+        passwordField.setStyle("-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4");
         passwordField.setPrefWidth(250);
         passwordField.setPrefHeight(50);
         grid.add(passwordField, 0, 1, 2, 1);
 
         // 로그인 버튼
         Button loginButton = new Button("Login");
-        loginButton.setStyle(
-                "-fx-background-color: #FFCDE1; -fx-text-fill: #F875AA; -fx-font-size:20px; -fx-font-weight: bold; -fx-background-radius: 30px;");
+        loginButton.setStyle("-fx-background-color: #FFCDE1; -fx-text-fill: #F875AA; -fx-font-size:20px; -fx-font-weight: bold; -fx-background-radius: 30px;");
         loginButton.setPrefWidth(120);
         loginButton.setPrefHeight(50);
         grid.add(loginButton, 0, 2, 2, 1);
@@ -72,47 +69,40 @@ public class LoginPage {
                 joinPageLayer = new StackPane();
                 JoinPage joinPage = new JoinPage(primaryStage);
                 joinPageLayer.getChildren().add(joinPage.getLayout());
-                joinPageLayer.setStyle("-fx-background-color: rgba(255, 255, 255, 0.9);"); // 투명도 설정
                 layout.getChildren().add(joinPageLayer);
             }
             joinPageLayer.setVisible(true); // JoinPage 레이어 표시
         });
 
-        // 로그인 버튼 클릭 시 처리
+        // 로그인 버튼 클릭 처리
         loginButton.setOnAction(e -> {
             String username = usernameField.getText();
             String password = passwordField.getText();
 
-            // DB 객체 생성
             DB db = new DB();
-            
             if (db.checkUser(username, password)) {
                 System.out.println("로그인 성공!");
-                
-                // DB에서 사용자 가입 날짜 가져오기
-                String regDate = db.getUserRegDate(username);
 
+                String regDate = db.getUserRegDate(username);
                 if (regDate != null) {
-                    // 로그인 성공 시 regDate와 username을 MyPage로 전달
-                    MyPage myPage = new MyPage(username, regDate);
-                    Scene scene = new Scene(myPage.getLayout(), 360, 640);
-                    primaryStage.setScene(scene); // 새로운 씬으로 변경
+                    // MyPage로 전환 (공통 레이아웃 유지)
+                    MyPage myPage = new MyPage(username, regDate, primaryStage);
+                    layout.getChildren().clear(); // 기존 콘텐츠 제거
+                    layout.getChildren().add(myPage.getLayout()); // MyPage 콘텐츠 추가
                 } else {
                     System.out.println("가입 날짜를 가져오지 못했습니다.");
                 }
             } else {
                 System.out.println("아이디 또는 비밀번호가 잘못되었습니다.");
             }
-
-            // DB 연결 종료
             db.close();
         });
 
-        // 그리드를 메인 콘텐츠 StackPane에 추가
+        // 그리드 추가
         mainContent.getChildren().add(grid);
 
-        // 메인 레이아웃에 메인 콘텐츠 추가
-        layout.getChildren().addAll(mainContent);
+        // 메인 레이아웃 구성
+        layout.getChildren().add(mainContent);
         layout.setStyle("-fx-background-color: #FFFFFF;");
     }
 

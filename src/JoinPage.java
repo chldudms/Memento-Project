@@ -36,8 +36,7 @@ public class JoinPage {
                 // 아이디 입력 필드
                 TextField usernameField = new TextField();
                 usernameField.setPromptText("아이디");
-                usernameField.setStyle(
-                                "-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4");
+                usernameField.setStyle("-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4");
                 usernameField.setPrefWidth(250);
                 usernameField.setPrefHeight(50);
                 grid.add(usernameField, 0, 0, 2, 1);
@@ -45,8 +44,7 @@ public class JoinPage {
                 // 비밀번호 입력 필드
                 PasswordField passwordField = new PasswordField();
                 passwordField.setPromptText("비밀번호");
-                passwordField.setStyle(
-                                "-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4");
+                passwordField.setStyle("-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4");
                 passwordField.setPrefWidth(250);
                 passwordField.setPrefHeight(50);
                 grid.add(passwordField, 0, 1, 2, 1);
@@ -54,16 +52,14 @@ public class JoinPage {
                 // 비밀번호 확인 필드
                 PasswordField passwdCheckField = new PasswordField();
                 passwdCheckField.setPromptText("비밀번호 확인");
-                passwdCheckField.setStyle(
-                                "-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4");
+                passwdCheckField.setStyle("-fx-font-size: 16px; -fx-border-color: #FFD8E4; -fx-border-width: 2px; -fx-background-color: #FFD8E4");
                 passwdCheckField.setPrefWidth(250);
                 passwdCheckField.setPrefHeight(50);
                 grid.add(passwdCheckField, 0, 2, 2, 1);
 
                 // 가입 버튼
                 Button joinButton = new Button("Join");
-                joinButton.setStyle(
-                                "-fx-background-color: #FFCDE1; -fx-text-fill: #F875AA; -fx-font-size:20px; -fx-font-weight: bold; -fx-background-radius: 30px;");
+                joinButton.setStyle("-fx-background-color: #FFCDE1; -fx-text-fill: #F875AA; -fx-font-size:20px; -fx-font-weight: bold; -fx-background-radius: 30px;");
                 joinButton.setPrefWidth(120);
                 joinButton.setPrefHeight(50);
                 grid.add(joinButton, 0, 3, 2, 1);
@@ -79,23 +75,38 @@ public class JoinPage {
                         String username = usernameField.getText();
                         String password = passwordField.getText();
                         String confirmPassword = passwdCheckField.getText();
-
+                
+                        // 비밀번호 일치 여부 확인
                         if (!password.equals(confirmPassword)) {
-                                System.out.println("비밀번호가 일치하지 않습니다.");
-                                return; // 비밀번호 불일치 시 종료
+                        System.out.println("비밀번호가 일치하지 않습니다.");
+                        return; // 비밀번호 불일치 시 종료
                         }
-
+                
                         // 데이터베이스에 사용자 정보 저장
                         saveUserToDatabase(username, password);
+                
+                        // 회원가입이 완료된 후 로그인 페이지로 이동
+                        System.out.println("가입 완료! 로그인 페이지로 이동합니다.");
+                
+                        // LoginPage 레이어 생성
+                        if (loginPageLayer == null) { // LoginPage 레이어가 없을 때만 새로 생성
+                                loginPageLayer = new StackPane();
+                                LoginPage loginPage = new LoginPage(primaryStage); // 새로운 로그인 페이지 생성
+                                loginPageLayer.getChildren().add(loginPage.getLayout());
+                                layout.getChildren().add(loginPageLayer);
+                        }
+                
+                        // 로그인 페이지를 표시
+                        loginPageLayer.setVisible(true);
                 });
+    
 
-                // 링크 클릭 시 JoinPage 레이어 표시
+                // 링크 클릭 시 loginPage 레이어 표시
                 loginLink.setOnAction(e -> {
                         if (loginPageLayer == null) { // JoinPage 레이어를 처음 클릭 시 생성
                                 loginPageLayer = new StackPane();
                                 LoginPage loginPage = new LoginPage(primaryStage);
                                 loginPageLayer.getChildren().add(loginPage.getLayout());
-                                loginPageLayer.setStyle("-fx-background-color: rgba(255, 255, 255, 0.9);");
                                 layout.getChildren().add(loginPageLayer);
                         }
                         loginPageLayer.setVisible(true);

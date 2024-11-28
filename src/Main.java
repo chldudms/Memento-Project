@@ -13,8 +13,6 @@ import javafx.geometry.Insets;
 import javafx.scene.shape.Line;
 
 public class Main extends Application {
-        private static final String username = null;
-        private static final String regDate = null;
         private BorderPane mainLayout;
         private HomePage homePage; // HomePage 인스턴스를 클래스 변수로 설정
                 
@@ -27,17 +25,14 @@ public class Main extends Application {
                 homePage = new HomePage(); // 초기화된 HomePage 인스턴스 생성
                 ToDoPage toDoPage = new ToDoPage();
                 LoginPage loginPage = new LoginPage(primaryStage);
-                JoinPage joinPage = new JoinPage(primaryStage);
-                MyPage myPage = new MyPage(username,  regDate); // 사용자 이름을 전달
 
                 // 하단 네비게이션 바 생성
                 NavigationBar navigationBar = new NavigationBar(
-                                homePage.getLayout(),
-                                toDoPage.getLayout(),
-                                loginPage.getLayout(),
-                                myPage.getLayout(),
-                                this // Main 객체 전달
-                );              
+                        homePage.getLayout(),
+                        toDoPage.getLayout(),
+                        loginPage.getLayout(),
+                        myPage.getLayout(),
+                        this);
 
                 // 레이아웃 설정 및 초기화면을 Cover로 설정
                 mainLayout = new BorderPane();
