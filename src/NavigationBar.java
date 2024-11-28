@@ -23,7 +23,7 @@ public class NavigationBar {
         navigationBar.setPadding(new Insets(5)); // Padding 유지
         navigationBar.setSpacing(40); // 요소 사이 간격을 줄임
         navigationBar.setStyle("-fx-background-color:  #FFCDE1; -fx-pref-height: 40px;"); // 높이를 줄이기 위한 pref-height 추가
-        navigationBar.setAlignment(Pos.CENTER);   
+        navigationBar.setAlignment(Pos.CENTER);
 
         // Create navigation sections with images
         StackPane homeSection = createNavSection("styles/home.png", "styles/homePink.png", homepage, true);
@@ -75,20 +75,17 @@ public class NavigationBar {
             toDoImageView = imageView;
         } else if (imagePath.contains("login")) {
             loginImageView = imageView;
-        } else if (imagePath.contains("mypage")) {
-            myPageImageView = imageView; // MyPage 아이콘 참조 저장
         }
-
-    // 섹션 클릭 시 선택 상태로 변경
-    section.setOnMouseClicked(e -> {
-        // Ensure page is not null before updating center
-        if (page != null) {
-            mainApp.getMainLayout().setCenter(page); // Update center content on click
-            selectSection(section, imageView, selectedImagePath); // 클릭된 섹션을 선택 상태로 설정
-        } else {
-            System.out.println("Page is null!"); // 페이지가 null일 경우 디버깅
-        }
-    });
+        // 섹션 클릭 시 선택 상태로 변경
+        section.setOnMouseClicked(e -> {
+            // Ensure page is not null before updating center
+            if (page != null) {
+                mainApp.getMainLayout().setCenter(page); // Update center content on click
+                selectSection(section, imageView, selectedImagePath); // 클릭된 섹션을 선택 상태로 설정
+            } else {
+                System.out.println("Page is null!"); // 페이지가 null일 경우 디버깅
+            }
+        });
 
         return section;
     }
@@ -106,12 +103,12 @@ public class NavigationBar {
             }
         }
 
-            // 현재 선택된 섹션의 이미지를 선택된 이미지로 변경
-            currentImageView.setImage(new Image(selectedImagePath));
-            selectedSection = section; // 선택된 섹션을 현재 섹션으로 업데이트
-        }
-
-        public HBox getLayout() {
-            return navigationBar;
-        }
+        // 현재 선택된 섹션의 이미지를 선택된 이미지로 변경
+        currentImageView.setImage(new Image(selectedImagePath));
+        selectedSection = section; // 선택된 섹션을 현재 섹션으로 업데이트
     }
+
+    public HBox getLayout() {
+        return navigationBar;
+    }
+}

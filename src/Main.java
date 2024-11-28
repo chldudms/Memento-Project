@@ -15,12 +15,12 @@ import javafx.scene.shape.Line;
 public class Main extends Application {
         private BorderPane mainLayout;
         private HomePage homePage; // HomePage 인스턴스를 클래스 변수로 설정
-                
+
         @Override
         public void start(Stage primaryStage) {
                 // Cover 화면 생성 및 클릭 이벤트 설정
                 Cover cover = new Cover(this::switchToHomePage);
-                                      
+
                 // 페이지 생성 (홈, 할 일, 로그인, 가입)
                 homePage = new HomePage(); // 초기화된 HomePage 인스턴스 생성
                 ToDoPage toDoPage = new ToDoPage();
@@ -28,11 +28,10 @@ public class Main extends Application {
 
                 // 하단 네비게이션 바 생성
                 NavigationBar navigationBar = new NavigationBar(
-                        homePage.getLayout(),
-                        toDoPage.getLayout(),
-                        loginPage.getLayout(),
-                        myPage.getLayout(),
-                        this);
+                                homePage.getLayout(),
+                                toDoPage.getLayout(),
+                                loginPage.getLayout(),
+                                this);
 
                 // 레이아웃 설정 및 초기화면을 Cover로 설정
                 mainLayout = new BorderPane();
@@ -90,27 +89,12 @@ public class Main extends Application {
                 return topLayout;
         }
 
-        public Scene getMainScene() {
-                return new Scene(mainLayout, 360, 640);
-        }
-
+        // getMainLayout() 메서드 추가
         public BorderPane getMainLayout() {
                 return mainLayout;
-        }
-
-        // 다이어리 페이지로 전환 메소드 활성화 및 구현
-        public void switchToDiaryPage(Stage currentStage, String diaryTitle) {
-                // DiaryPage로 전환
-                DiaryPage diaryPage = new DiaryPage(diaryTitle, currentStage, () -> {
-                        // 뒤로가기 버튼 누르면 홈으로 복귀
-                        currentStage.setScene(getMainScene());
-                });
-                currentStage.setScene(getMainScene());
         }
 
         public static void main(String[] args) {
                 launch(args);
         }
-
-        
 }
