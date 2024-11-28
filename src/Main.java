@@ -15,12 +15,12 @@ import javafx.scene.shape.Line;
 public class Main extends Application {
         private BorderPane mainLayout;
         private HomePage homePage; // HomePage 인스턴스를 클래스 변수로 설정
-                
+
         @Override
         public void start(Stage primaryStage) {
                 // Cover 화면 생성 및 클릭 이벤트 설정
                 Cover cover = new Cover(this::switchToHomePage);
-                                      
+
                 // 페이지 생성 (홈, 할 일, 로그인, 가입)
                 homePage = new HomePage(); // 초기화된 HomePage 인스턴스 생성
                 ToDoPage toDoPage = new ToDoPage();
@@ -28,10 +28,10 @@ public class Main extends Application {
 
                 // 하단 네비게이션 바 생성
                 NavigationBar navigationBar = new NavigationBar(
-                        homePage.getLayout(),
-                        toDoPage.getLayout(),
-                        loginPage.getLayout(),
-                        this);
+                                homePage.getLayout(),
+                                toDoPage.getLayout(),
+                                loginPage.getLayout(),
+                                this);
 
                 // 레이아웃 설정 및 초기화면을 Cover로 설정
                 mainLayout = new BorderPane();

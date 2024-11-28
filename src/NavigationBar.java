@@ -23,7 +23,7 @@ public class NavigationBar {
         navigationBar.setPadding(new Insets(5)); // Padding 유지
         navigationBar.setSpacing(40); // 요소 사이 간격을 줄임
         navigationBar.setStyle("-fx-background-color:  #FFCDE1; -fx-pref-height: 40px;"); // 높이를 줄이기 위한 pref-height 추가
-        navigationBar.setAlignment(Pos.CENTER);   
+        navigationBar.setAlignment(Pos.CENTER);
 
         // Create navigation sections with images
         StackPane homeSection = createNavSection("styles/home.png", "styles/homePink.png", homepage, true);
@@ -68,14 +68,14 @@ public class NavigationBar {
             loginImageView = imageView;
         }
 
-            // 아이콘에 대한 참조 저장
-            if (isHome) {
-                homeImageView = imageView;
-            } else if (imagePath.contains("todo")) {
-                toDoImageView = imageView;
-            } else if (imagePath.contains("login")) {
-                loginImageView = imageView;
-            } 
+        // 아이콘에 대한 참조 저장
+        if (isHome) {
+            homeImageView = imageView;
+        } else if (imagePath.contains("todo")) {
+            toDoImageView = imageView;
+        } else if (imagePath.contains("login")) {
+            loginImageView = imageView;
+        }
         // 섹션 클릭 시 선택 상태로 변경
         section.setOnMouseClicked(e -> {
             // Ensure page is not null before updating center
@@ -103,12 +103,12 @@ public class NavigationBar {
             }
         }
 
-            // 현재 선택된 섹션의 이미지를 선택된 이미지로 변경
-            currentImageView.setImage(new Image(selectedImagePath));
-            selectedSection = section; // 선택된 섹션을 현재 섹션으로 업데이트
-        }
-
-        public HBox getLayout() {
-            return navigationBar;
-        }
+        // 현재 선택된 섹션의 이미지를 선택된 이미지로 변경
+        currentImageView.setImage(new Image(selectedImagePath));
+        selectedSection = section; // 선택된 섹션을 현재 섹션으로 업데이트
     }
+
+    public HBox getLayout() {
+        return navigationBar;
+    }
+}

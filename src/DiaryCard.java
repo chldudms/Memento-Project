@@ -4,6 +4,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.scene.Scene;
 
 public class DiaryCard {
     private StackPane layout;
@@ -31,9 +32,16 @@ public class DiaryCard {
     }
 
     private void handleCardClick(MouseEvent event) {
-        // 다이어리 페이지로 이동
-        DiaryPage diaryPage = new DiaryPage(title, (Stage) layout.getScene().getWindow());
+        // 현재 Stage 가져오기
         Stage currentStage = (Stage) layout.getScene().getWindow();
+
+        // 다이어리 페이지로 이동
+        DiaryPage diaryPage = new DiaryPage(title, currentStage, () -> {
+            // 뒤로가기 버튼 클릭 시 HomePage로 돌아오기
+            currentStage.setScene(currentStage.getScene()); // 이미 현재 씬을 유지하기
+        });
+
+        // 새로운 씬으로 다이어리 페이지 설정
         currentStage.setScene(diaryPage.getScene());
     }
 
