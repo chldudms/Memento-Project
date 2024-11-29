@@ -2,8 +2,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -23,17 +26,22 @@ public class MyPage {
         contentBox.setSpacing(20); // 요소 간 간격
         contentBox.setAlignment(Pos.CENTER); // 중앙 정렬
 
-        // "My Page" 제목
-        Text title = new Text("My Page");
-        title.setFont(Font.font("Arial", FontWeight.BOLD, 30));
+        // 이미지 경로 
+        Image profileImage = new Image("file:C:/Users/ungesxy.BOOK-CCUUTHN80B.000/Desktop/Memento-Project/src/styles/default.jpg");
+
+        // ImageView에 이미지 설정
+        ImageView profileImageView = new ImageView(profileImage);
+        profileImageView.setFitWidth(100); // 이미지 크기 조정
+        profileImageView.setFitHeight(100); // 이미지 크기 조정
+        profileImageView.setPreserveRatio(true); // 비율 유지
+
+        // 이미지 동그랗게 만들기 위해 Circle로 클리핑
+        Circle clip = new Circle(50, 50, 50); // 반지름을 50으로 설정하여 동그란 모양
+        profileImageView.setClip(clip);
 
         // 사용자 아이디 표시
-        Text userInfo = new Text("User: " + username);
+        Text userInfo = new Text("Name: " + username);
         userInfo.setFont(Font.font("Arial", FontWeight.NORMAL, 18));
-
-        // 프로필 이미지 표시 (예시로 텍스트로 표시)
-        Text profileText = new Text("Profile Image: default.jpg");
-        profileText.setFont(Font.font("Arial", FontWeight.NORMAL, 18));
 
         // 가입 날짜 표시
         Text joinDateText = new Text("Join Date: " + regDate);
@@ -58,7 +66,7 @@ public class MyPage {
         });
 
         // VBox에 요소 추가
-        contentBox.getChildren().addAll(title, userInfo, profileText, joinDateText, logoutButton);
+        contentBox.getChildren().addAll(profileImageView, userInfo,  joinDateText, logoutButton); 
 
         // StackPane에 VBox 추가
         layout.getChildren().add(contentBox);
