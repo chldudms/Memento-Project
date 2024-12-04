@@ -101,24 +101,23 @@ public class DiaryPage {
     private void toggleStickerPanel() {
         StackPane root = (StackPane) scene.getRoot();
 
-        // 이미 스티커판이 보이는 경우 숨기기
+        // 이미 스티커 판이 보이는 경우 숨기기
         if (isStickerPanelVisible) {
             root.getChildren().removeIf(node -> node instanceof VBox && "sticker-panel".equals(node.getId()));
             isStickerPanelVisible = false;
             return;
         }
 
-        // 새 스티커판 생성
+        // 새 스티커 판 생성
         VBox stickerPanel = new VBox(10);
-        stickerPanel.setMinSize(300, 200); // 최소 크기 설정
+     //   stickerPanel.setMinSize(300, 200); // 최소 크기 설정
         stickerPanel.setMaxSize(300, 200); // 최대 크기 설정
-        stickerPanel.setPrefSize(300, 200);  // 권장 크기 설정
-
+      //  stickerPanel.setPrefSize(300, 200); // 권장 크기 설정
         stickerPanel.setId("sticker-panel");
         stickerPanel.setPadding(new Insets(10));
         stickerPanel.setStyle("-fx-background-color: #FFD8E4;");
-        stickerPanel.setAlignment(Pos.CENTER); 
-        stickerPanel.setPrefSize(300, 200);  
+        stickerPanel.setAlignment(Pos.CENTER);
+       // stickerPanel.setPrefSize(300, 200);
 
         // 스티커 이미지를 담을 GridPane 생성
         GridPane stickerGrid = new GridPane();
@@ -128,27 +127,31 @@ public class DiaryPage {
 
         // 스티커 추가
         for (int i = 1; i <= 6; i++) {
-            ImageView sticker = new ImageView(new Image("file:styles/sticker" + i + ".png"));
-            sticker.setFitWidth(10); // 스티커 크기
-            sticker.setFitHeight(10);
+            // 스티커 이미지 로드
+            String imagePath = "/styles/sticker" + i + ".png"; // 클래스 경로 기반
+            Image image = new Image(getClass().getResource(imagePath).toExternalForm());
 
-            // 스티커 클릭 이벤트: 클릭한 스티커를 화면에 추가
-            sticker.setOnMouseClicked(event -> addStickerToDiary(sticker.getImage()));
+            ImageView sticker = new ImageView(image);
+            sticker.setFitWidth(100); // GridPane에 표시되는 크기
+            sticker.setFitHeight(100);
 
-            // GridPane에 스티커 추가
-            int col = (i - 1) % 3; // 3개씩 열에 배치
+            // 스티커 클릭 이벤트: 클릭한 스티커를 다이어리에 추가
+            sticker.setOnMouseClicked(event -> addStickerToDiary(image));
+
+            // GridPane에 스티커 추가 (3개씩 한 줄로 정렬)
+            int col = (i - 1) % 3; // 열 계산
             int row = (i - 1) / 3; // 행 계산
             stickerGrid.add(sticker, col, row);
         }
 
         stickerPanel.getChildren().add(stickerGrid);
 
-        // 스티커판을 다이어리 화면에 추가
+        // 스티커 판을 다이어리 화면에 추가
         root.getChildren().add(stickerPanel);
 
-        // 스티커판 위치를 스티커 버튼 위로 설정
+        // 스티커 판 위치 조정
         StackPane.setAlignment(stickerPanel, Pos.BOTTOM_RIGHT);
-        StackPane.setMargin(stickerPanel, new Insets(30, 100, 120, 0));
+        StackPane.setMargin(stickerPanel, new Insets(30, 100, 120, 0)); // 위, 오른쪽, 아래, 왼쪽
 
         isStickerPanelVisible = true;
     }
@@ -156,14 +159,19 @@ public class DiaryPage {
     // 다이어리 화면에 스티커 추가
     private void addStickerToDiary(Image stickerImage) {
         ImageView sticker = new ImageView(stickerImage);
-        sticker.setFitWidth(10); // 크기 조정
-        sticker.setFitHeight(10);
+        sticker.setPreserveRatio(true);
+        sticker.setFitWidth(stickerImage.getWidth()); // 원본 크기 적용
+        sticker.setFitHeight(stickerImage.getHeight());
 
-        // 스티커를 드래그 가능하게 설정
+        // 스티커 초기 위치 설정
+        sticker.setLayoutX(300); // 초기 X 위치
+        sticker.setLayoutY(200); // 초기 Y 위치
+
+        // 드래그 가능하게 설정
         sticker.setOnMousePressed(this::handleMousePressed);
         sticker.setOnMouseDragged(this::handleMouseDragged);
 
-        // 다이어리 화면에 스티커 추가
+        // 스티커를 StackPane에 추가
         ((StackPane) scene.getRoot()).getChildren().add(sticker);
     }
 
@@ -174,6 +182,7 @@ public class DiaryPage {
         yOffset = event.getSceneY() - source.getLayoutY();
     }
 
+    // 마우스 드래그 시 위치 이동
     private void handleMouseDragged(MouseEvent event) {
         javafx.scene.Node source = (javafx.scene.Node) event.getSource(); // 이벤트 발생 객체
         source.setLayoutX(event.getSceneX() - xOffset);
