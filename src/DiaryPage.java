@@ -159,8 +159,8 @@ public class DiaryPage {
     private Button createIconButton(String imagePath, String tooltipText) {
         Button button = new Button();
         ImageView icon = new ImageView(new Image(imagePath));
-        icon.setFitWidth(50);
-        icon.setFitHeight(50);
+        icon.setFitWidth(70);
+        icon.setFitHeight(70);
         button.setGraphic(icon);
         button.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
         button.setTooltip(new Tooltip(tooltipText));
