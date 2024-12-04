@@ -1,5 +1,6 @@
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -57,6 +58,8 @@ public class DiaryPage {
         mainLayout.getChildren().add(bottomButtonBox);
         root.getChildren().add(mainLayout);
 
+        
+
         // 사진 버튼 이벤트
         photoButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
@@ -72,8 +75,13 @@ public class DiaryPage {
         // 스티커 버튼 이벤트
         stickerButton.setOnAction(e -> toggleStickerPanel());
 
+        // 텍스트 버튼 이벤트 추가
+        textButton.setOnAction(e -> addTextBoxToDiary());
+        
         this.scene = new Scene(root, 800, 600);
     }
+
+    
 
     private void toggleStickerPanel() {
         StackPane root = (StackPane) scene.getRoot();
@@ -85,7 +93,7 @@ public class DiaryPage {
             return;
         }
 
-        // 새 스티커 판 생성
+        // 스티커 판 생성
         VBox stickerPanel = new VBox(10);
         stickerPanel.setMaxSize(300, 200); // 최대 크기 설정
         stickerPanel.setId("sticker-panel");
@@ -129,6 +137,7 @@ public class DiaryPage {
         isStickerPanelVisible = true;
     }
 
+   //화면에 스티커 추가
     private void addStickerToDiary(Image stickerImage) {
         ImageView sticker = new ImageView(stickerImage);
         sticker.setPreserveRatio(true);
@@ -155,6 +164,45 @@ public class DiaryPage {
 
         stickerPane.getChildren().add(sticker);
     }
+
+    private void addTextBoxToDiary() {
+    // 텍스트 상자 생성
+    TextField textField = new TextField();
+    textField.setPromptText("여기에 텍스트 입력..."); // 기본 텍스트
+    textField.setPrefWidth(200);  // 기본 크기 설정
+    textField.setPrefHeight(50);
+    
+    // 드래그 가능 설정
+    textField.setOnMousePressed(this::handleMousePressed);
+    textField.setOnMouseDragged(this::handleMouseDragged);
+
+    // 크기 조정 기능 (스크롤로 크기 조절)
+    textField.setOnScroll(event -> {
+        double scale = event.getDeltaY() > 0 ? 1.1 : 0.9;
+        textField.setPrefWidth(textField.getPrefWidth() * scale);
+        textField.setPrefHeight(textField.getPrefHeight() * scale);
+    });
+
+    // 공용 stickerPane에 추가
+    stickerPane.getChildren().add(textField);
+
+    // 초기 위치 설정
+    textField.setLayoutX(100);
+    textField.setLayoutY(100);
+}
+
+private void handleMousePressed(MouseEvent event) {
+    javafx.scene.Node source = (javafx.scene.Node) event.getSource();
+    source.setUserData(
+            new double[] { event.getSceneX() - source.getLayoutX(), event.getSceneY() - source.getLayoutY() });
+}
+
+private void handleMouseDragged(MouseEvent event) {
+    javafx.scene.Node source = (javafx.scene.Node) event.getSource();
+    double[] offsets = (double[]) source.getUserData();
+    source.setLayoutX(event.getSceneX() - offsets[0]);
+    source.setLayoutY(event.getSceneY() - offsets[1]);
+}
 
     private Button createIconButton(String imagePath, String tooltipText) {
         Button button = new Button();
