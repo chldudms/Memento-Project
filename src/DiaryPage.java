@@ -10,6 +10,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.Label;
 
 import java.io.File;
 
@@ -164,45 +165,64 @@ public class DiaryPage {
 
         stickerPane.getChildren().add(sticker);
     }
-
-    private void addTextBoxToDiary() {
-    // 텍스트 상자 생성
-    TextField textField = new TextField();
-    textField.setPromptText("여기에 텍스트 입력..."); // 기본 텍스트
-    textField.setPrefWidth(200);  // 기본 크기 설정
-    textField.setPrefHeight(50);
     
-    // 드래그 가능 설정
-    textField.setOnMousePressed(this::handleMousePressed);
-    textField.setOnMouseDragged(this::handleMouseDragged);
+   //텍스트 상자 추가
+   private void addTextBoxToDiary() {
+       // Label 생성 (텍스트만 추가)
+       Label textLabel = new Label("텍스트 입력...");
+       textLabel.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-text-fill: black;");
+       textLabel.setPrefWidth(200);
+       textLabel.setPrefHeight(50);
 
-    // 크기 조정 기능 (스크롤로 크기 조절)
-    textField.setOnScroll(event -> {
-        double scale = event.getDeltaY() > 0 ? 1.1 : 0.9;
-        textField.setPrefWidth(textField.getPrefWidth() * scale);
-        textField.setPrefHeight(textField.getPrefHeight() * scale);
-    });
+       // 드래그 이벤트 추가
+       textLabel.setOnMousePressed(event -> {
+           textLabel.setUserData(new double[] {
+                   event.getSceneX() - textLabel.getLayoutX(),
+                   event.getSceneY() - textLabel.getLayoutY()
+           });
+       });
 
-    // 공용 stickerPane에 추가
-    stickerPane.getChildren().add(textField);
+       textLabel.setOnMouseDragged(event -> {
+           double[] offsets = (double[]) textLabel.getUserData();
+           textLabel.setLayoutX(event.getSceneX() - offsets[0]);
+           textLabel.setLayoutY(event.getSceneY() - offsets[1]);
+       });
 
-    // 초기 위치 설정
-    textField.setLayoutX(100);
-    textField.setLayoutY(100);
-}
+       // 크기 조정 기능 추가 (마우스 휠)
+       textLabel.setOnScroll(event -> {
+           double scale = event.getDeltaY() > 0 ? 1.1 : 0.9;
+           textLabel.setScaleX(textLabel.getScaleX() * scale);
+           textLabel.setScaleY(textLabel.getScaleY() * scale);
+       });
 
-private void handleMousePressed(MouseEvent event) {
-    javafx.scene.Node source = (javafx.scene.Node) event.getSource();
-    source.setUserData(
-            new double[] { event.getSceneX() - source.getLayoutX(), event.getSceneY() - source.getLayoutY() });
-}
+       // 초기 위치 설정
+       textLabel.setLayoutX(100);
+       textLabel.setLayoutY(100);
 
-private void handleMouseDragged(MouseEvent event) {
-    javafx.scene.Node source = (javafx.scene.Node) event.getSource();
-    double[] offsets = (double[]) source.getUserData();
-    source.setLayoutX(event.getSceneX() - offsets[0]);
-    source.setLayoutY(event.getSceneY() - offsets[1]);
-}
+       // 클릭 시 텍스트 수정 가능하도록 이벤트 추가
+       textLabel.setOnMouseClicked(event -> {
+           if (event.getClickCount() == 2) { // 더블 클릭 시 편집 모드
+               TextField textField = new TextField(textLabel.getText());
+               textField.setLayoutX(textLabel.getLayoutX());
+               textField.setLayoutY(textLabel.getLayoutY());
+               textField.setPrefWidth(textLabel.getPrefWidth());
+               textField.setPrefHeight(textLabel.getPrefHeight());
+
+               textField.setOnAction(e -> {
+                   textLabel.setText(textField.getText());
+                   stickerPane.getChildren().remove(textField);
+                   stickerPane.getChildren().add(textLabel);
+               });
+
+               stickerPane.getChildren().remove(textLabel);
+               stickerPane.getChildren().add(textField);
+               textField.requestFocus();
+           }
+       });
+
+       // 텍스트 상자를 Pane에 추가
+       stickerPane.getChildren().add(textLabel);
+   }
 
     private Button createIconButton(String imagePath, String tooltipText) {
         Button button = new Button();
