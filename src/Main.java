@@ -15,16 +15,11 @@ import javafx.scene.shape.Line;
 public class Main extends Application {
         private BorderPane mainLayout;
         private HomePage homePage; // HomePage 인스턴스를 클래스 변수로 설정
-        private Stage primaryStage; // primaryStage를 클래스 변수로 설정
-        private DiaryPage diaryPage; // 다이어리 페이지
-        
+
         @Override
         public void start(Stage primaryStage) {
                 // Cover 화면 생성 및 클릭 이벤트 설정
                 Cover cover = new Cover(this::switchToHomePage);
-                this.primaryStage = primaryStage;
-
-               // diaryPage = new DiaryPage(this); // Main 인스턴스를 전달
 
                 // 페이지 생성 (홈, 할 일, 로그인, 가입)
                 homePage = new HomePage(); // 초기화된 HomePage 인스턴스 생성
@@ -51,20 +46,6 @@ public class Main extends Application {
                 primaryStage.setTitle("MementoDiary");
                 primaryStage.setScene(mainScene);
                 primaryStage.show();
-        }
-
-        public void moveToDiaryPage(String title) {
-                // 다이어리 페이지 생성
-                DiaryPage diaryPage = new DiaryPage(title, primaryStage, this::movePage);
-
-                // 새로운 씬으로 다이어리 페이지 설정
-                primaryStage.setScene(diaryPage.getScene());
-        }
-
-        public void movePage() {
-                // 메인 페이지로 돌아오기
-                mainLayout.setCenter(homePage.getLayout());
-                primaryStage.setScene(new Scene(mainLayout, 360, 640));
         }
 
         // HomePage로 전환하는 메소드
@@ -112,11 +93,8 @@ public class Main extends Application {
         public BorderPane getMainLayout() {
                 return mainLayout;
         }
-        
 
         public static void main(String[] args) {
                 launch(args);
         }
-
-
 }
