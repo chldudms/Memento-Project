@@ -11,44 +11,38 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Tooltip;
 
 import java.io.File;
-import java.lang.classfile.components.ClassPrinter.Node;
 
 public class DiaryPage {
     private Scene scene;
-    private Main main = new Main();
-    private Stage primaryStage;
-    private ImageView imageView;
-    private double xOffset = 0, yOffset = 0;
+    private Pane stickerPane; // 스티커를 추가할 공용 Pane
     private boolean isStickerPanelVisible = false; // 스티커 판의 가시성 여부
 
     public DiaryPage(String diaryTitle, Stage currentStage, Runnable onBack) {
         StackPane root = new StackPane();
         root.setStyle("-fx-background-color: #FFFFFF;");
 
+        // 스티커 및 사진을 표시할 공용 Pane
+        stickerPane = new Pane();
+        stickerPane.setPrefSize(800, 600);
+
         VBox mainLayout = new VBox(10);
         mainLayout.setPadding(new Insets(20));
         mainLayout.setAlignment(Pos.TOP_CENTER);
+        mainLayout.getChildren().add(stickerPane);
 
-        imageView = new ImageView();
-        imageView.setFitWidth(300);
-        imageView.setFitHeight(300);
-        imageView.setPreserveRatio(true);
-
-        Pane imagePane = new Pane();
-        imagePane.getChildren().add(imageView);
-        imagePane.setPrefSize(800, 600);
-
-        // 하단 버튼 영역 (고정 위치)
+        // 하단 버튼 영역
         HBox bottomButtonBox = new HBox(300);
         bottomButtonBox.setAlignment(Pos.BOTTOM_CENTER);
-        bottomButtonBox.setPadding(new Insets(0, 0, 0, 0));
+        bottomButtonBox.setPadding(new Insets(10));
 
+        // 공유 버튼 (좌측)
         HBox leftButtonBox = new HBox();
         leftButtonBox.setAlignment(Pos.BOTTOM_LEFT);
         Button shareButton = createIconButton("styles/share.png", "공유");
         shareButton.setOnAction(e -> System.out.println("공유 버튼 클릭!"));
         leftButtonBox.getChildren().add(shareButton);
 
+        // 텍스트, 스티커, 사진, 저장 버튼 (우측)
         HBox rightButtonBox = new HBox(10);
         rightButtonBox.setAlignment(Pos.BOTTOM_RIGHT);
         Button textButton = createIconButton("styles/text.png", "텍스트");
@@ -57,11 +51,13 @@ public class DiaryPage {
         Button saveButton = createIconButton("styles/save.png", "저장");
         rightButtonBox.getChildren().addAll(textButton, stickerButton, photoButton, saveButton);
 
+        // 버튼 박스를 하단에 배치
         bottomButtonBox.getChildren().addAll(leftButtonBox, rightButtonBox);
 
-        mainLayout.getChildren().addAll(imagePane, bottomButtonBox);
+        mainLayout.getChildren().add(bottomButtonBox);
+        root.getChildren().add(mainLayout);
 
-        // 사진 버튼 클릭 시 이미지 파일 선택
+        // 사진 버튼 이벤트
         photoButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.getExtensionFilters()
@@ -69,31 +65,12 @@ public class DiaryPage {
             File selectedFile = fileChooser.showOpenDialog(currentStage);
             if (selectedFile != null) {
                 Image image = new Image("file:" + selectedFile.getAbsolutePath());
-                imageView.setImage(image);
+                addStickerToDiary(image); // 사진도 스티커처럼 추가
             }
         });
 
-        // 스티커 버튼 클릭 시 스티커판 토글
+        // 스티커 버튼 이벤트
         stickerButton.setOnAction(e -> toggleStickerPanel());
-
-        imageView.setOnMousePressed(this::handleMousePressed);
-        imageView.setOnMouseDragged(this::handleMouseDragged);
-
-        // 돌아가기 버튼 (오른쪽 상단)
-        Button backButton = new Button("뒤로");
-        backButton.setStyle("-fx-background-color: #FFC0CB; -fx-text-fill: white;");
-        backButton.setOnAction(e -> {
-            if (currentStage != null) {
-                HomePage homePage = new HomePage();
-                currentStage.setScene(homePage.getMainScene());
-            } else {
-                System.err.println("Error: currentStage is null.");
-            }
-        });
-
-        root.getChildren().addAll(mainLayout, backButton);
-        StackPane.setAlignment(backButton, Pos.TOP_RIGHT);
-        StackPane.setMargin(backButton, new Insets(10));
 
         this.scene = new Scene(root, 800, 600);
     }
@@ -101,7 +78,7 @@ public class DiaryPage {
     private void toggleStickerPanel() {
         StackPane root = (StackPane) scene.getRoot();
 
-        // 이미 스티커 판이 보이는 경우 숨기기
+        // 스티커 판 가시성 조정
         if (isStickerPanelVisible) {
             root.getChildren().removeIf(node -> node instanceof VBox && "sticker-panel".equals(node.getId()));
             isStickerPanelVisible = false;
@@ -110,91 +87,80 @@ public class DiaryPage {
 
         // 새 스티커 판 생성
         VBox stickerPanel = new VBox(10);
-     //   stickerPanel.setMinSize(300, 200); // 최소 크기 설정
         stickerPanel.setMaxSize(300, 200); // 최대 크기 설정
-      //  stickerPanel.setPrefSize(300, 200); // 권장 크기 설정
         stickerPanel.setId("sticker-panel");
         stickerPanel.setPadding(new Insets(10));
         stickerPanel.setStyle("-fx-background-color: #FFD8E4;");
         stickerPanel.setAlignment(Pos.CENTER);
-       // stickerPanel.setPrefSize(300, 200);
 
-        // 스티커 이미지를 담을 GridPane 생성
         GridPane stickerGrid = new GridPane();
-        stickerGrid.setHgap(10); // 열 간격
-        stickerGrid.setVgap(10); // 행 간격
+        stickerGrid.setHgap(10);
+        stickerGrid.setVgap(10);
         stickerGrid.setAlignment(Pos.CENTER);
 
         // 스티커 추가
         for (int i = 1; i <= 6; i++) {
-            // 스티커 이미지 로드
-            String imagePath = "/styles/sticker" + i + ".png"; // 클래스 경로 기반
-            Image image = new Image(getClass().getResource(imagePath).toExternalForm());
+            String imagePath = "/styles/sticker" + i + ".png"; // 클래스 경로
+            Image image;
+            try {
+                image = new Image(getClass().getResource(imagePath).toExternalForm());
+            } catch (Exception ex) {
+                System.err.println("스티커 로드 실패: " + imagePath);
+                continue;
+            }
 
             ImageView sticker = new ImageView(image);
-            sticker.setFitWidth(100); // GridPane에 표시되는 크기
+            sticker.setFitWidth(100);
             sticker.setFitHeight(100);
 
-            // 스티커 클릭 이벤트: 클릭한 스티커를 다이어리에 추가
             sticker.setOnMouseClicked(event -> addStickerToDiary(image));
 
-            // GridPane에 스티커 추가 (3개씩 한 줄로 정렬)
-            int col = (i - 1) % 3; // 열 계산
-            int row = (i - 1) / 3; // 행 계산
+            int col = (i - 1) % 3;
+            int row = (i - 1) / 3;
             stickerGrid.add(sticker, col, row);
         }
 
         stickerPanel.getChildren().add(stickerGrid);
-
-        // 스티커 판을 다이어리 화면에 추가
         root.getChildren().add(stickerPanel);
 
-        // 스티커 판 위치 조정
-        StackPane.setAlignment(stickerPanel, Pos.BOTTOM_RIGHT);
-        StackPane.setMargin(stickerPanel, new Insets(30, 100, 120, 0)); // 위, 오른쪽, 아래, 왼쪽
+        StackPane.setAlignment(stickerPanel, Pos.BOTTOM_CENTER);
+        StackPane.setMargin(stickerPanel, new Insets(30, 0, 120, 400)); // 위, 오른쪽, 아래, 왼쪽
 
         isStickerPanelVisible = true;
     }
 
-    // 다이어리 화면에 스티커 추가
     private void addStickerToDiary(Image stickerImage) {
         ImageView sticker = new ImageView(stickerImage);
         sticker.setPreserveRatio(true);
-        sticker.setFitWidth(stickerImage.getWidth()); // 원본 크기 적용
-        sticker.setFitHeight(stickerImage.getHeight());
+        sticker.setFitWidth(100);
+        sticker.setFitHeight(100);
 
-        // 스티커 초기 위치 설정
-        sticker.setLayoutX(300); // 초기 X 위치
-        sticker.setLayoutY(200); // 초기 Y 위치
+        // 드래그 및 위치 조정
+        sticker.setOnMousePressed(event -> {
+            sticker.setUserData(new double[] { event.getSceneX() - sticker.getLayoutX(),
+                    event.getSceneY() - sticker.getLayoutY() });
+        });
+        sticker.setOnMouseDragged(event -> {
+            double[] offsets = (double[]) sticker.getUserData();
+            sticker.setLayoutX(event.getSceneX() - offsets[0]);
+            sticker.setLayoutY(event.getSceneY() - offsets[1]);
+        });
 
-        // 드래그 가능하게 설정
-        sticker.setOnMousePressed(this::handleMousePressed);
-        sticker.setOnMouseDragged(this::handleMouseDragged);
+        // 크기 조정
+        sticker.setOnScroll(event -> {
+            double scale = event.getDeltaY() > 0 ? 1.1 : 0.9;
+            sticker.setFitWidth(sticker.getFitWidth() * scale);
+            sticker.setFitHeight(sticker.getFitHeight() * scale);
+        });
 
-        // 스티커를 StackPane에 추가
-        ((StackPane) scene.getRoot()).getChildren().add(sticker);
+        stickerPane.getChildren().add(sticker);
     }
 
-    // 마우스 눌렀을 때 위치 기록
-    private void handleMousePressed(MouseEvent event) {
-        javafx.scene.Node source = (javafx.scene.Node) event.getSource(); // 이벤트 발생 객체
-        xOffset = event.getSceneX() - source.getLayoutX();
-        yOffset = event.getSceneY() - source.getLayoutY();
-    }
-
-    // 마우스 드래그 시 위치 이동
-    private void handleMouseDragged(MouseEvent event) {
-        javafx.scene.Node source = (javafx.scene.Node) event.getSource(); // 이벤트 발생 객체
-        source.setLayoutX(event.getSceneX() - xOffset);
-        source.setLayoutY(event.getSceneY() - yOffset);
-    }
-
-    // createIconButton method remains the same
     private Button createIconButton(String imagePath, String tooltipText) {
         Button button = new Button();
         ImageView icon = new ImageView(new Image(imagePath));
-        icon.setFitWidth(70);
-        icon.setFitHeight(70);
+        icon.setFitWidth(50);
+        icon.setFitHeight(50);
         button.setGraphic(icon);
         button.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
         button.setTooltip(new Tooltip(tooltipText));
