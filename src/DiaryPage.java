@@ -119,7 +119,7 @@ public class DiaryPage {
         leftButtonBox.setAlignment(Pos.BOTTOM_LEFT);
         Button downButton = createIconButton("styles/down.png", "다운로드");
 
-        downButton.setTranslateX(70);
+        downButton.setTranslateX(30);
 
         // 다운로드 버튼 이벤트
         downButton.setOnAction(event -> {
@@ -141,18 +141,8 @@ public class DiaryPage {
                 }
             }
         });
-
-        // "홈으로" 버튼 추가
-        Button backButton = createIconButton("styles/xBtn1.png", "홈으로");
-        backButton.setTranslateX(700);
-        backButton.setTranslateY(-520);
         
-        // 홈 버튼 이벤트 핸들러 추가
-        backButton.setOnAction(e -> {
-            
-        });
-        
-        leftButtonBox.getChildren().addAll(downButton, backButton);
+        leftButtonBox.getChildren().addAll(downButton);
 
         // 텍스트, 스티커, 사진, 저장 버튼 (우측)
         HBox rightButtonBox = new HBox(5);
@@ -172,7 +162,7 @@ public class DiaryPage {
         stackPane.getChildren().addAll(popUpImageView, textButton, stickerButton, photoButton, saveButton);  // 버튼이 이미지 위에 위치
         stackPane.setVisible(false);
 
-        editButton.setTranslateX(295);
+        editButton.setTranslateX(330);
 
         // 초기 상태
         rightButtonBox.getChildren().add(editButton);
@@ -183,10 +173,10 @@ public class DiaryPage {
         photoButton.setVisible(false);
         saveButton.setVisible(false);
 
-        textButton.setTranslateX(-70);  
-        stickerButton.setTranslateX(-70);
-        photoButton.setTranslateX(-70); 
-        saveButton.setTranslateX(-70); 
+        textButton.setTranslateX(-35);  
+        stickerButton.setTranslateX(-35);
+        photoButton.setTranslateX(-35); 
+        saveButton.setTranslateX(-35); 
 
         rightButtonBox.getChildren().addAll(textButton, stickerButton, photoButton, saveButton);
 
@@ -259,10 +249,6 @@ public class DiaryPage {
         this.scene = new Scene(root, 800, 600);
     }
     
-    public DiaryPage(Object object) {
-        //TODO Auto-generated constructor stub
-    }
-
     private void toggleStickerPanel() {
         StackPane root = (StackPane) scene.getRoot();
 
@@ -323,6 +309,8 @@ public class DiaryPage {
         textLabel.setWrapText(true); // 텍스트 줄바꿈 설정
         textLabel.setMaxWidth(300); // 최대 너비 설정
         textLabel.setPrefHeight(50); // 초기 높이 설정
+        textLabel.setLayoutX(300);
+        textLabel.setLayoutY(300);
 
         // 텍스트 추가 후, 드래그, 크기 조정, 삭제 기능 적용
         addDraggableAndResizable(textLabel);
@@ -428,6 +416,8 @@ private void addDeletable(Node node) {
         sticker.setPreserveRatio(true);
         sticker.setFitWidth(100);
         sticker.setFitHeight(100);
+        sticker.setLayoutX(300);
+        sticker.setLayoutY(300);
 
         // 스티커 추가 후, 드래그, 크기 조정, 삭제 기능 적용
         addDraggableAndResizable(sticker);
