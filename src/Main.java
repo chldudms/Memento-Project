@@ -15,9 +15,12 @@ import javafx.scene.shape.Line;
 public class Main extends Application {
         private BorderPane mainLayout;
         private HomePage homePage; // HomePage 인스턴스를 클래스 변수로 설정
+        private Stage primaryStage; // PrimaryStage를 필드로 선언
 
         @Override
         public void start(Stage primaryStage) {
+                this.primaryStage = primaryStage; // start() 메서드에서 PrimaryStage를 받음
+
                 // Cover 화면 생성 및 클릭 이벤트 설정
                 Cover cover = new Cover(this::switchToHomePage);
 
@@ -58,6 +61,12 @@ public class Main extends Application {
                 mainLayout.setCenter(homePage.getLayout()); // 이미 생성된 homePage 인스턴스를 사용
         }
 
+        // 메인 화면으로 돌아가는 메서드
+        public void switchToMainPage() {
+                Cover cover = new Cover(this::switchToHomePage); // 메인 페이지로 돌아가는 레이아웃 생성
+                mainLayout.setCenter(cover); // 메인 화면으로 설정
+        }
+
         // 상단 로고 및 경계선 생성
         private VBox createTopLayout() {
                 VBox topLayout = new VBox();
@@ -87,6 +96,12 @@ public class Main extends Application {
                 topLayout.getChildren().addAll(logo, lineContainer);
 
                 return topLayout;
+        }
+
+
+        // PrimaryStage를 다른 클래스에서 접근할 수 있도록 getter 메서드 추가
+        public Stage getPrimaryStage() {
+                return primaryStage;
         }
 
         // getMainLayout() 메서드 추가

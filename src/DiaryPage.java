@@ -1,37 +1,31 @@
+import javafx.scene.Scene;
+import javafx.scene.layout.*;
+import javafx.scene.control.*;
+import javafx.scene.text.*;
+import javafx.scene.paint.Color;
+import javafx.geometry.*;
+import javafx.stage.*;
+import javafx.scene.input.*;
+import javafx.scene.image.*;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.control.Tooltip;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-import java.io.File;
 
 public class DiaryPage {
+    private StackPane root;
     private Scene scene;
     private Pane stickerPane; // 스티커를 추가할 공용 Pane
     private boolean isStickerPanelVisible = false; // 스티커 판의 가시성 여부
 
-    public DiaryPage(String diaryTitle, Stage currentStage, Runnable onBack) {
-        StackPane root = new StackPane();
-        root.setStyle("-fx-background-color: #FFFFFF;");
-       // this.onBack = onBack;
+    public DiaryPage(String diaryTitle, Runnable onBack) {
+        // 새 Stage 생성
+        Stage newStage = new Stage();
+        StackPane root1 = new StackPane();
+        root1.setStyle("-fx-background-color: #FFFFFF;");
 
         // 공용 Pane 설정
         stickerPane = new Pane();
@@ -55,11 +49,19 @@ public class DiaryPage {
         Label dateLabel = new Label(formattedDate);
         dateLabel.setFont(Font.font("Arial", FontWeight.BOLD, 18)); // Arial 글꼴, Bold, 크기 18
         dateLabel.setTextFill(Color.DEEPSKYBLUE); // 하늘색 텍스트 색상
-    
+
         // X 버튼 생성
         Button backButton = createIconButton("styles/xBtn.png", "돌아가기");
 
-        backButton.setOnAction(e -> onBack.run()); // 메인 페이지로 돌아가기
+        backButton.setOnAction(e -> {
+            try {
+                newStage.close(); // 새 창을 닫는 방식으로 돌아가기
+                onBack.run(); // 메인 페이지로 돌아가기
+            } catch (Exception ex) {
+                System.out.println("응 아니야");
+                ex.printStackTrace(); // 예외 발생 시 스택 트레이스를 출력
+            }
+        });
 
         // 날짜 레이블과 X 버튼을 레이아웃에 추가
         topLayout.getChildren().addAll(dateLabel, backButton);
@@ -94,7 +96,14 @@ public class DiaryPage {
         HBox leftButtonBox = new HBox(15); // 간격
         leftButtonBox.setAlignment(Pos.BOTTOM_LEFT);
         Button shareButton = createIconButton("styles/share.png", "공유");
-        shareButton.setOnAction(e -> System.out.println("공유 버튼 클릭!"));
+        shareButton.setOnAction(e -> {
+            try {
+                System.out.println("공유 버튼 클릭!");
+            } catch (Exception ex) {
+                System.out.println("응 아니야");
+                ex.printStackTrace();
+            }
+        });
         leftButtonBox.getChildren().add(shareButton);
 
         // 우측 버튼: 텍스트, 스티커, 사진, 저장
@@ -109,35 +118,58 @@ public class DiaryPage {
         // 버튼 박스 배치
         bottomButtonBox.getChildren().addAll(leftButtonBox, rightButtonBox);
         mainLayout.getChildren().add(bottomButtonBox);
-        root.getChildren().add(mainLayout);
+        root1.getChildren().add(mainLayout);
 
         // 사진 추가 버튼 이벤트
         photoButton.setOnAction(e -> {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.getExtensionFilters()
-                    .add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"));
-            File selectedFile = fileChooser.showOpenDialog(currentStage);
-            if (selectedFile != null) {
-                Image image = new Image("file:" + selectedFile.getAbsolutePath());
-                addStickerToDiary(image);
+            try {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.getExtensionFilters()
+                        .add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"));
+                File selectedFile = fileChooser.showOpenDialog(newStage); // 새 창 대신 기존 Stage 사용
+                if (selectedFile != null) {
+                    Image image = new Image("file:" + selectedFile.getAbsolutePath());
+                    addStickerToDiary(image);
+                }
+            } catch (Exception ex) {
+                System.out.println("응 아니야");
+                ex.printStackTrace();
             }
         });
 
         // 스티커 추가 버튼 이벤트
-        stickerButton.setOnAction(e -> toggleStickerPanel());
+        stickerButton.setOnAction(e -> {
+            try {
+                toggleStickerPanel();
+            } catch (Exception ex) {
+                System.out.println("응 아니야");
+                ex.printStackTrace();
+            }
+        });
 
         // 텍스트 추가 버튼 이벤트
-        textButton.setOnAction(e -> addTextBoxToDiary());
+        textButton.setOnAction(e -> {
+            try {
+                addTextBoxToDiary();
+            } catch (Exception ex) {
+                System.out.println("응 아니야");
+                ex.printStackTrace();
+            }
+        });
 
-        this.scene = new Scene(root, 800, 600);
-    }
+        this.scene = new Scene(root1, 800, 600);
+        newStage.setScene(scene); // 새 창에 Scene 설정
+        newStage.setTitle(diaryTitle); // 창 제목 설정
+        newStage.show(); // 새 창을 띄우기
+    } // 다이어리 페이지 생성자
+      // 다이어리 페이지 생성자
 
     private void toggleStickerPanel() {
-        StackPane root = (StackPane) scene.getRoot();
+        StackPane root2 = (StackPane) scene.getRoot();
 
         // 스티커 판 가시성 조정
         if (isStickerPanelVisible) {
-            root.getChildren().removeIf(node -> node instanceof VBox && "sticker-panel".equals(node.getId()));
+            root2.getChildren().removeIf(node -> node instanceof VBox && "sticker-panel".equals(node.getId()));
             isStickerPanelVisible = false;
             return;
         }
@@ -178,7 +210,7 @@ public class DiaryPage {
         }
 
         stickerPanel.getChildren().add(stickerGrid);
-        root.getChildren().add(stickerPanel);
+        root2.getChildren().add(stickerPanel);
 
         StackPane.setAlignment(stickerPanel, Pos.BOTTOM_CENTER);
         StackPane.setMargin(stickerPanel, new Insets(30, 0, 120, 400)); // 위, 오른쪽, 아래, 왼쪽
@@ -316,7 +348,13 @@ public class DiaryPage {
         return button;
     }
 
-    public Scene getScene() {
-        return scene;
+    // 드래그와 크기 조정을 위한 클래스
+    private static class Delta {
+        double x, y;
+    }
+
+    // 레이아웃을 반환하는 getLayout() 메서드 추가
+    public StackPane getLayout() {
+        return root; // DiaryPage의 레이아웃을 반환
     }
 }
