@@ -1,14 +1,20 @@
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 
 import java.io.File;
 
@@ -72,8 +78,13 @@ public class DiaryPage {
         // 스티커 버튼 이벤트
         stickerButton.setOnAction(e -> toggleStickerPanel());
 
+        // 텍스트 버튼 이벤트 추가
+        textButton.setOnAction(e -> addTextBoxToDiary());
+        
         this.scene = new Scene(root, 800, 600);
     }
+
+    
 
     private void toggleStickerPanel() {
         StackPane root = (StackPane) scene.getRoot();
@@ -85,7 +96,7 @@ public class DiaryPage {
             return;
         }
 
-        // 새 스티커 판 생성
+        // 스티커 판 생성
         VBox stickerPanel = new VBox(10);
         stickerPanel.setMaxSize(300, 200); // 최대 크기 설정
         stickerPanel.setId("sticker-panel");
@@ -129,32 +140,126 @@ public class DiaryPage {
         isStickerPanelVisible = true;
     }
 
+    private void addTextBoxToDiary() {
+        Label textLabel = new Label("텍스트 입력...");
+        textLabel.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-text-fill: black;");
+        textLabel.setWrapText(true); // 텍스트 줄바꿈 설정
+        textLabel.setMaxWidth(300); // 최대 너비 설정
+        textLabel.setPrefHeight(50); // 초기 높이 설정
+
+        // 텍스트 추가 후, 드래그, 크기 조정, 삭제 기능 적용
+        addDraggableAndResizable(textLabel);
+        addDeletable(textLabel);
+
+        // 텍스트 수정 및 삭제 이벤트 추가
+        textLabel.setOnMouseClicked(event -> {
+            if (event.isShiftDown()) {
+                // Shift 키를 누른 상태에서 클릭 시 삭제
+                stickerPane.getChildren().remove(textLabel);
+            } else if (event.getClickCount() == 2) {
+                // 더블 클릭 시 텍스트 수정
+                TextField textField = new TextField(textLabel.getText());
+                textField.setLayoutX(textLabel.getLayoutX());
+                textField.setLayoutY(textLabel.getLayoutY());
+                textField.setPrefWidth(300); // 입력 필드 너비 설정
+
+                // 텍스트 길이 제한 및 동적 크기 조정
+                textField.textProperty().addListener((observable, oldValue, newValue) -> {
+                    if (newValue.length() > 500) {
+                        textField.setText(oldValue); // 500자 제한
+                    } else {
+                        textLabel.setPrefHeight(calculateLabelHeight(newValue, textField.getPrefWidth()));
+                    }
+                });
+
+                textField.setOnAction(e -> {
+                    textLabel.setText(textField.getText());
+                    textLabel.setPrefHeight(calculateLabelHeight(textField.getText(), textField.getPrefWidth()));
+                    stickerPane.getChildren().remove(textField);
+                    stickerPane.getChildren().add(textLabel);
+                });
+
+                stickerPane.getChildren().remove(textLabel);
+                stickerPane.getChildren().add(textField);
+                textField.requestFocus();
+            }
+        });
+
+        // 크기 조정 기능 추가 (마우스 휠)
+        textLabel.setOnScroll(event -> {
+            double scale = event.getDeltaY() > 0 ? 1.1 : 0.9;
+            textLabel.setScaleX(textLabel.getScaleX() * scale);
+            textLabel.setScaleY(textLabel.getScaleY() * scale);
+        })
+
+        stickerPane.getChildren().add(textLabel);
+    }
+
+
+    // 드래그 위치 조정, 크기 조정, 삭제 기능을 하나의 함수로 관리
+private void addDraggableAndResizable(Node node) {
+    // 드래그로 위치 조정
+    node.setOnMousePressed(event -> {
+        node.setUserData(new double[] {
+            event.getSceneX() - node.getLayoutX(),
+            event.getSceneY() - node.getLayoutY()
+        });
+    });
+
+    node.setOnMouseDragged(event -> {
+        double[] offsets = (double[]) node.getUserData();
+        node.setLayoutX(event.getSceneX() - offsets[0]);
+        node.setLayoutY(event.getSceneY() - offsets[1]);
+    });
+
+    // 크기 조정 (마우스 휠)
+    node.setOnScroll(event -> {
+        double scale = event.getDeltaY() > 0 ? 1.1 : 0.9;
+        if (node instanceof ImageView) {
+            // 이미지 크기 조정
+            ImageView imageView = (ImageView) node;
+            imageView.setFitWidth(imageView.getFitWidth() * scale);
+            imageView.setFitHeight(imageView.getFitHeight() * scale);
+        } else if (node instanceof TextArea) {
+            // 텍스트 크기 조정
+            TextArea textArea = (TextArea) node;
+            textArea.setScaleX(textArea.getScaleX() * scale);
+            textArea.setScaleY(textArea.getScaleY() * scale);
+        }
+    });
+}
+
+// 삭제 기능 추가
+private void addDeletable(Node node) {
+    node.setOnMouseClicked(event -> {
+        if (event.getClickCount() == 2) { // 더블 클릭 시 삭제
+            stickerPane.getChildren().remove(node);
+        }
+    });
+}
+
+    // 텍스트 길이에 따라 Label 높이 계산
+    private double calculateLabelHeight(String text, double maxWidth) {
+        Text tempText = new Text(text);
+        tempText.setWrappingWidth(maxWidth); // Label과 동일한 최대 너비 적용
+        new Scene(new Group(tempText)); // 크기 계산을 위한 Scene 생성
+        return tempText.getLayoutBounds().getHeight() + 10; // 텍스트 높이 + 여백
+    }
+
+   //화면에 스티커 추가
     private void addStickerToDiary(Image stickerImage) {
         ImageView sticker = new ImageView(stickerImage);
         sticker.setPreserveRatio(true);
         sticker.setFitWidth(100);
         sticker.setFitHeight(100);
 
-        // 드래그 및 위치 조정
-        sticker.setOnMousePressed(event -> {
-            sticker.setUserData(new double[] { event.getSceneX() - sticker.getLayoutX(),
-                    event.getSceneY() - sticker.getLayoutY() });
-        });
-        sticker.setOnMouseDragged(event -> {
-            double[] offsets = (double[]) sticker.getUserData();
-            sticker.setLayoutX(event.getSceneX() - offsets[0]);
-            sticker.setLayoutY(event.getSceneY() - offsets[1]);
-        });
-
-        // 크기 조정
-        sticker.setOnScroll(event -> {
-            double scale = event.getDeltaY() > 0 ? 1.1 : 0.9;
-            sticker.setFitWidth(sticker.getFitWidth() * scale);
-            sticker.setFitHeight(sticker.getFitHeight() * scale);
-        });
+        // 스티커 추가 후, 드래그, 크기 조정, 삭제 기능 적용
+        addDraggableAndResizable(sticker);
+        addDeletable(sticker);
 
         stickerPane.getChildren().add(sticker);
     }
+    
 
     private Button createIconButton(String imagePath, String tooltipText) {
         Button button = new Button();
