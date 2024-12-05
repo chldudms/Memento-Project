@@ -5,8 +5,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.FileChooser;
@@ -15,8 +19,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
+
 
 import java.io.File;
+
+import javax.imageio.ImageIO;
 
 public class DiaryPage {
     private Scene scene;
@@ -41,21 +51,111 @@ public class DiaryPage {
         bottomButtonBox.setAlignment(Pos.BOTTOM_CENTER);
         bottomButtonBox.setPadding(new Insets(10));
 
-        // 공유 버튼 (좌측)
+        // 다운로드 버튼 (좌측)
         HBox leftButtonBox = new HBox();
         leftButtonBox.setAlignment(Pos.BOTTOM_LEFT);
-        Button shareButton = createIconButton("styles/share.png", "공유");
-        shareButton.setOnAction(e -> System.out.println("공유 버튼 클릭!"));
-        leftButtonBox.getChildren().add(shareButton);
+        Button downButton = createIconButton("styles/down.png", "다운로드");
+
+        downButton.setTranslateX(50);
+
+        // 다운로드 버튼 이벤트
+        downButton.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("이미지 저장");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG 파일", "*.png"));
+            
+            // 저장할 파일 선택
+            File saveFile = fileChooser.showSaveDialog(currentStage);
+            if (saveFile != null) {
+                try {
+                    // stickerPane을 캡처하여 이미지로 저장
+                    WritableImage snapshot = stickerPane.snapshot(null, null);
+                    ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", saveFile);
+                    System.out.println("이미지가 저장되었습니다: " + saveFile.getAbsolutePath());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("이미지 저장 중 오류 발생");
+                }
+            }
+        });
+        leftButtonBox.getChildren().add(downButton);
 
         // 텍스트, 스티커, 사진, 저장 버튼 (우측)
-        HBox rightButtonBox = new HBox(10);
+        HBox rightButtonBox = new HBox(5);
         rightButtonBox.setAlignment(Pos.BOTTOM_RIGHT);
+
+        Image popUpImage = new Image("styles/popUP.png");  // 이미지 파일 경로 수정
+        ImageView popUpImageView = new ImageView(popUpImage);
+
+        Button editButton = createIconButton("styles/edit.png", "편집");
         Button textButton = createIconButton("styles/text.png", "텍스트");
         Button stickerButton = createIconButton("styles/sticker.png", "스티커");
         Button photoButton = createIconButton("styles/upload.png", "사진");
         Button saveButton = createIconButton("styles/save.png", "저장");
+
+        // StackPane에 이미지와 버튼 추가 (버튼이 이미지 위로 위치)
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().addAll(popUpImageView, textButton, stickerButton, photoButton, saveButton);  // 버튼이 이미지 위에 위치
+        stackPane.setVisible(false);
+
+        editButton.setTranslateX(310);
+
+        // 초기 상태
+        rightButtonBox.getChildren().add(editButton);
+
+        // 나머지 버튼들 숨기기
+        textButton.setVisible(false);
+        stickerButton.setVisible(false);
+        photoButton.setVisible(false);
+        saveButton.setVisible(false);
+
+        textButton.setTranslateX(-55);  
+        stickerButton.setTranslateX(-55);
+        photoButton.setTranslateX(-55); 
+        saveButton.setTranslateX(-55); 
+
         rightButtonBox.getChildren().addAll(textButton, stickerButton, photoButton, saveButton);
+
+        // Edit 버튼 클릭 시 나머지 버튼들 보이기/숨기기
+        editButton.setOnAction(event -> {
+            textButton.setVisible(true);
+            stickerButton.setVisible(true);
+            photoButton.setVisible(true);
+            saveButton.setVisible(true);
+            stackPane.setVisible(true);
+
+
+            // Edit 버튼 가시성 전환
+            editButton.setVisible(false);  // 나머지 버튼들이 보일 때, editButton은 숨김
+        });
+
+        // 저장 버튼 클릭 시 나머지 버튼들 숨기고 edit 버튼 다시 보이기
+        saveButton.setOnAction(event -> {
+            // 나머지 버튼 숨기기
+            textButton.setVisible(false);
+            stickerButton.setVisible(false);
+            photoButton.setVisible(false);
+            saveButton.setVisible(false);
+
+            // editButton 다시 보이기
+            editButton.setVisible(true);
+
+            // "저장되었습니다" 메시지 추가
+            Label saveMessage = new Label("저장되었습니다");
+            saveMessage.setStyle("-fx-font-size: 20px; -fx-text-fill: #F875AA; -fx-background-color: transparent;");
+            saveMessage.setAlignment(Pos.CENTER);
+
+            // 메시지를 화면에 추가
+            root.getChildren().add(saveMessage);
+            
+            // 메시지를 화면에 표시한 후 일정 시간 뒤 자동으로 사라지도록 설정
+            Timeline timeline = new Timeline(
+                new KeyFrame(Duration.seconds(2), e -> {
+                    root.getChildren().remove(saveMessage); // 메시지 제거
+                })
+            );
+            timeline.play();  // 타이머 시작
+        });
 
         // 버튼 박스를 하단에 배치
         bottomButtonBox.getChildren().addAll(leftButtonBox, rightButtonBox);
@@ -83,9 +183,7 @@ public class DiaryPage {
         
         this.scene = new Scene(root, 800, 600);
     }
-
     
-
     private void toggleStickerPanel() {
         StackPane root = (StackPane) scene.getRoot();
 
@@ -190,14 +288,13 @@ public class DiaryPage {
             double scale = event.getDeltaY() > 0 ? 1.1 : 0.9;
             textLabel.setScaleX(textLabel.getScaleX() * scale);
             textLabel.setScaleY(textLabel.getScaleY() * scale);
-        })
+        });
 
         stickerPane.getChildren().add(textLabel);
     }
 
-
     // 드래그 위치 조정, 크기 조정, 삭제 기능을 하나의 함수로 관리
-private void addDraggableAndResizable(Node node) {
+    private void addDraggableAndResizable(Node node) {
     // 드래그로 위치 조정
     node.setOnMousePressed(event -> {
         node.setUserData(new double[] {
