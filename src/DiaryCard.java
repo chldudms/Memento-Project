@@ -22,10 +22,10 @@ public class DiaryCard {
 
         Text titleText = new Text(title);
         titleText.setFill(Color.WHITE); // 제목 텍스트 색상 설정
-        titleText.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;"); // 제목 텍스트 스타일
+        titleText.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;"); // 제목 텍스트 스타일
 
         layout.getChildren().addAll(cover, titleText); // 표지와 제목 추가
-        layout.setStyle("-fx-padding: 5; -fx-alignment: center;"); // 패딩 및 정렬 설정
+        layout.setStyle("-fx-padding: 7; -fx-alignment: center;"); // 패딩 및 정렬 설정
 
         // 다이어리 카드 클릭 이벤트 설정
         layout.setOnMouseClicked(event -> handleCardClick(event));

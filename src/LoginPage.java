@@ -6,6 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
@@ -83,6 +84,9 @@ public class LoginPage {
             if (db.checkUser(username, password)) {
                 System.out.println("로그인 성공!");
 
+                // 로그인 성공 시 Session에 username 저장
+                Session.login(username);
+                
                 String regDate = db.getUserRegDate(username);
                 if (regDate != null) {
                     // MyPage로 전환 (공통 레이아웃 유지)
