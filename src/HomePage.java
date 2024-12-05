@@ -1,11 +1,14 @@
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.scene.layout.GridPane;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -24,7 +27,7 @@ public class HomePage {
     private VBox mainLayout; // 메인 레이아웃
     private static Scene mainScene; // 메인 화면 Scene 저장
 
-    public HomePage() {
+    public HomePage(Stage primaryStage) {
         layout = new StackPane();
         diaryGrid = new GridPane();
         diaryGrid.setHgap(10);
@@ -91,7 +94,7 @@ public class HomePage {
     private Pane createDiaryUI() { // 다이어리 생성창
 
         // 닫기(x) 이미지 아이콘
-        Image xImage = new Image("styles/xBtn.png"); // 이미지 경로 지정
+        Image xImage = new Image("styles/xBtn2.png"); // 이미지 경로 지정
         ImageView xImageView = new ImageView(xImage);
         xImageView.setFitWidth(30); // 이미지 크기 조정
         xImageView.setFitHeight(30);
@@ -141,6 +144,10 @@ public class HomePage {
         diaryCreationLayout.setMaxHeight(300); // 최대 높이 설정 (정사각형)
         
         createButton.setOnAction(e -> {
+            if(!Session.isLoggedIn()){
+                System.out.println("로그인 후 이용할 수 있습니다.");
+                return;
+            }
             String title = titleField.getText();
             if (!title.isEmpty()) {
                 addDiary(title, toHex(colorPicker.getValue()));
@@ -151,7 +158,7 @@ public class HomePage {
         // 닫기 버튼을 오른쪽 상단에 배치하기 위해 HBox 사용
         HBox header = new HBox(closeButton); // 닫기 버튼을 HBox로 감싸기
         header.setAlignment(Pos.TOP_RIGHT); // 오른쪽 상단 정렬
-        header.setPadding(new Insets(-50, 0, 0, 0)); // 위쪽 패딩을 설정하여 x버튼이 더 위로 가게
+        header.setPadding(new Insets(-60, -5, 0, 0)); // 위쪽 패딩을 설정하여 x버튼이 더 위로 가게
 
         // 생성 레이아웃에 요소 추가
         diaryCreationLayout.getChildren().addAll(header, titleField, colorPickerLayout, createButton);
@@ -177,6 +184,7 @@ public class HomePage {
         if (mainScene == null) {
             throw new IllegalStateException("mainScene이 초기화되지 않았습니다.");
         }
+
         return mainScene;
     }
 

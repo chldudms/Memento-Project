@@ -35,18 +35,12 @@ public class DiaryCard {
         // 현재 Stage 가져오기
         Stage currentStage = (Stage) layout.getScene().getWindow();
 
-        // 다이어리 페이지로 이동
-        DiaryPage diaryPage = new DiaryPage(title, () -> {
-            // 뒤로가기 버튼 클릭 시 HomePage로 돌아오기
-            currentStage.setScene(currentStage.getScene()); // 이미 현재 씬을 유지하기
-        });
+        DiaryPage diaryPage = new DiaryPage(title, currentStage, () -> {
 
-        // 새 Stage를 띄우는 방식으로 다이어리 페이지 설정
-        Stage newStage = new Stage(); // 새 Stage 생성
-        Scene diaryPageScene = new Scene(diaryPage.getLayout(), 800, 600); // DiaryPage의 레이아웃으로 씬 생성
-        newStage.setScene(diaryPageScene); // 새 창에 씬을 설정
-        newStage.setTitle(title); // 창 제목 설정
-        newStage.show(); // 새 창을 띄우기
+        }); 
+
+         // 새로운 씬으로 다이어리 페이지 설정
+         currentStage.setScene(diaryPage.getScene());
     }
 
     public StackPane getLayout() {
