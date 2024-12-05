@@ -91,6 +91,10 @@ public class ToDoPage {
 
     // Method to add a checklist item
     private void addChecklistItem() {
+        if(!Session.isLoggedIn()){
+            System.out.println("로그인 후 이용할 수 있습니다.");
+            return;
+        }
         HBox checklistItemContainer = new HBox(10); // Create a container for the checklist item and line with spacing
         checklistItemContainer.setAlignment(Pos.CENTER); // Align checklist items to the center right
         CheckBox checklistItem = new CheckBox(); // Create a new checkbox
@@ -122,20 +126,31 @@ public class ToDoPage {
         // Add event handler to remove item when checked
         checklistItem.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) { // If checkbox is checked
-                checklistContainer.getChildren().remove(checklistItemContainer); // Remove the checklist item
-                  // Move the add button below the new checklist item if there are 8 or fewer items
-                if (checklistContainer.getChildren().size() <= 7) {
-                    checklistContainer.getChildren().remove(addImageView); // Remove from checklist container
-                    checklistContainer.getChildren().add(addImageView); // Add button below the new checklist item
-                    addImageView.setTranslateY(-5);
-                }
-                else {
-                    // If there are more than 8 items, ensure the add button is in its original position
-                    if (!mainLayout.getChildren().contains(addImageView)) {
-                        checklistContainer.getChildren().remove(addImageView);
-                        mainLayout.getChildren().add(addImageView);
+                // Add a delay of 1 second before removing the item
+                Timeline timeline = new Timeline(new KeyFrame(
+                    Duration.seconds(1), // 1 second delay
+                    event -> {
+                        // Remove the checklist item after 1 second
+                        checklistContainer.getChildren().remove(checklistItemContainer);
+
+                        // Move the add button below the new checklist item if there are 8 or fewer items
+                        if (checklistContainer.getChildren().size() <= 7) {
+                            checklistContainer.getChildren().remove(addImageView); // Remove from checklist container
+                            checklistContainer.getChildren().add(addImageView); // Add button below the new checklist item
+                            addImageView.setTranslateY(-5);
+                        }
+                        else {
+                            // If there are more than 8 items, ensure the add button is in its original position
+                            if (!mainLayout.getChildren().contains(addImageView)) {
+                                checklistContainer.getChildren().remove(addImageView);
+                                mainLayout.getChildren().add(addImageView);
+                            }
+                        }
                     }
-                }
+                ));
+
+                // Start the timeline for the 1-second delay
+                timeline.play();
             }
         });
 

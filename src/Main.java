@@ -25,7 +25,7 @@ public class Main extends Application {
                 Cover cover = new Cover(this::switchToHomePage);
 
                 // 페이지 생성 (홈, 할 일, 로그인, 가입)
-                homePage = new HomePage(); // 초기화된 HomePage 인스턴스 생성
+                homePage = new HomePage(primaryStage); // 초기화된 HomePage 인스턴스 생성
                 ToDoPage toDoPage = new ToDoPage();
                 LoginPage loginPage = new LoginPage(primaryStage);
 
