@@ -11,7 +11,7 @@ public class DiaryCard {
     private String title;
     private String coverColor;
 
-    // Constructor takes in a title and cover color
+    // 다이어리카드 생성자
     public DiaryCard(String title, String coverColor) {
         this.title = title;
         this.coverColor = coverColor;
