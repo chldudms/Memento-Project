@@ -89,11 +89,8 @@ public class DB {
 
     public static void main(String[] args) {
         DB db = new DB();
-        // 예시: 사용자 인증 테스트
         boolean isAuthenticated = db.checkUser("testuser", "testpassword");
         System.out.println("사용자 인증 결과: " + (isAuthenticated ? "성공" : "실패"));
-
-        // 예시: 사용자 가입 날짜 가져오기
         String regDate = db.getUserRegDate("testuser");
         System.out.println("가입 날짜: " + regDate);
         

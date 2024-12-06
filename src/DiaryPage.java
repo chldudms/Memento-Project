@@ -119,6 +119,12 @@ public class DiaryPage {
         leftButtonBox.setAlignment(Pos.BOTTOM_LEFT);
         Button downButton = createIconButton("styles/down.png", "다운로드");
 
+        Button editButton = createIconButton("styles/edit.png", "편집");
+        Button textButton = createIconButton("styles/text.png", "텍스트");
+        Button stickerButton = createIconButton("styles/sticker.png", "스티커");
+        Button photoButton = createIconButton("styles/upload.png", "사진");
+        Button saveButton = createIconButton("styles/save.png", "저장");
+
         downButton.setTranslateX(30);
 
         // 다운로드 버튼 이벤트
@@ -126,15 +132,28 @@ public class DiaryPage {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("이미지 저장");
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG 파일", "*.png"));
-            
+
             // 저장할 파일 선택
             File saveFile = fileChooser.showSaveDialog(currentStage);
             if (saveFile != null) {
                 try {
-                    // stickerPane을 캡처하여 이미지로 저장
-                    WritableImage snapshot = stickerPane.snapshot(null, null);
+                    // 다운로드 버튼 숨기기 (버튼 아이콘 제외)
+                    downButton.setVisible(false); // 다운로드 버튼을 숨깁니다.
+                    editButton.setVisible(false);
+                    textButton.setVisible(false);
+                    stickerButton.setVisible(false);
+                    photoButton.setVisible(false);
+                    saveButton.setVisible(false);
+
+                    // 다이어리 전체 레이아웃(root)을 캡처하여 이미지로 저장
+                    WritableImage snapshot = root.snapshot(null, null); // 캡처 대상 변경
                     ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", saveFile);
                     System.out.println("이미지가 저장되었습니다: " + saveFile.getAbsolutePath());
+
+                    // 캡처 후 다운로드 버튼 다시 보이게 설정
+                    downButton.setVisible(true); // 다운로드 버튼을 다시 보이게 합니다.
+                    editButton.setVisible(true);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.out.println("이미지 저장 중 오류 발생");
@@ -150,12 +169,6 @@ public class DiaryPage {
 
         Image popUpImage = new Image("styles/popUP.png");  // 이미지 파일 경로 수정
         ImageView popUpImageView = new ImageView(popUpImage);
-
-        Button editButton = createIconButton("styles/edit.png", "편집");
-        Button textButton = createIconButton("styles/text.png", "텍스트");
-        Button stickerButton = createIconButton("styles/sticker.png", "스티커");
-        Button photoButton = createIconButton("styles/upload.png", "사진");
-        Button saveButton = createIconButton("styles/save.png", "저장");
 
         // StackPane에 이미지와 버튼 추가 (버튼이 이미지 위로 위치)
         StackPane stackPane = new StackPane();
